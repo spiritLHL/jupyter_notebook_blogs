@@ -1,7 +1,7 @@
 ---
 toc: true
 layout: post
-description: A minimal example of using markdown with fastpages.
+description: markdown文档书写的简单示例
 categories: [markdown]
 title: An Example Markdown Post
 ---
