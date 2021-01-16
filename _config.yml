@@ -36,6 +36,8 @@ url: "https://spiritLHL.github.io" # the base hostname & protocol for your site,
 #
 baseurl: "/jupyter_notebook_blogs" # the subpath of your site, e.g. "/blog".
 
+# 添加评论
+comments: true
 # Github和Twitter是可选的：
 minima:
   social_links:
