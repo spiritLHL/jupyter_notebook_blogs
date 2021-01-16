@@ -36,18 +36,6 @@ url: "https://spiritLHL.github.io" # the base hostname & protocol for your site,
 #
 baseurl: "/jupyter_notebook_blogs" # the subpath of your site, e.g. "/blog".
 
-# 添加评论
-comments: true
-# 整合utterance评论
-utterance:
-  enable: true
-  #仓库名字，格式：你的用户ID/仓库名称，如：zhangsan/utterance_repo
-  repo: spiritLHL/hugoblogtalks
-  #主题
-  theme: github-light
-  #映射配置
-  issue_term: pathname
-
 # Github和Twitter是可选的：
 minima:
   social_links:
