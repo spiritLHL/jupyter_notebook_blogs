@@ -36,28 +36,28 @@ url: "https://spiritLHL.github.io" # the base hostname & protocol for your site,
 #
 baseurl: "/jupyter_notebook_blogs" # the subpath of your site, e.g. "/blog".
 
-# Github and twitter are optional:
+# Github和Twitter是可选的：
 minima:
   social_links:
     twitter: Dan.ajax
     github: spiritLHL
 
-# Set this to true to get LaTeX math equation support
-use_math: 
+# 将此设置为true可获得LaTeX数学方程式支持
+use_math: true
 
-# Set this to true to display the summary of your blog post under your title on the Home page.
+# 将此属性设置为true可以在首页上的标题下显示博客文章的摘要。
 show_description: true
 
-# Set this to true to display image previews on home page, if they exist
-show_image: false
+# 将其设置为true以在主页上显示图像预览（如果存在）
+show_image: true
 
-# Set this to true to turn on annotations with hypothes.is (https://web.hypothes.is/)
-annotations: false
+# 将此属性设置为true可使用hypothes.is（https://web.hypothes.is/）打开注释
+annotations: true
 
-# Set this to true to display tags on each post
+# 将此设置为true可在每个帖子上显示标签
 show_tags: true
 
-# Add your Google Analytics ID here if you have one and want to use it
+# 如果您有要使用的Google Analytics（分析）ID，请在此处添加
 google_analytics: 2248958981
 
 exclude:
@@ -65,21 +65,21 @@ exclude:
   - action.yml
   - Makefile
 
-# this setting allows you to keep pages organized in the _pages folder
+# 此设置使您可以将页面整理在_pages文件夹中
 include:
   - _pages
 
-# This specifies what badges are turned on by default for notebook posts.
+# 这指定默认情况下为笔记本帖子打开的徽章。
 default_badges:
   github: true
   binder: true
   colab: true
 
-# Escape HTML in post descriptions
+# 在帖子描述中转义HTML
 html_escape:
   description: false
 
-# Everything below here should be left alone. Modifications may break fastpages
+# 下面的所有内容均应保留。修改可能会中断快速页面
 future: true
 theme: minima
 plugins:
@@ -96,7 +96,7 @@ plugins:
   - jemoji
 
 # See https://jekyllrb.com/docs/pagination/
-# For pagination to work, you cannot have index.md at the root of your repo, instead you must rename this file to index.html
+# 为了使分页生效，您不能在存储库的根目录下拥有index.md，而必须将此文件重命名为index.html
 paginate: 15
 paginate_path: /page:num/
 
@@ -116,7 +116,7 @@ kramdown:
   hard_wrap: false
   syntax_highlighter: rouge
 
-# to limit size of xml as it can grow quite large.
+# 限制xml的大小，因为它可能会变得很大。
 feed:
   posts_limit: 5 #default posts_limit: 10
   excerpt_only: true
