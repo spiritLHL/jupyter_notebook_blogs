@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Selenium的web自动化操作03(语法补充) | SpiritLHL’s Python blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Selenium的web自动化操作03(语法补充)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Selenium的web自动化操作03(语法补充)" />
+<meta property="og:description" content="Selenium的web自动化操作03(语法补充)" />
+<link rel="canonical" href="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/17/selenium03.html" />
+<meta property="og:url" content="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/17/selenium03.html" />
+<meta property="og:site_name" content="SpiritLHL’s Python blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-17T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Selenium的web自动化操作03(语法补充)","url":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/17/selenium03.html","@type":"BlogPosting","headline":"Selenium的web自动化操作03(语法补充)","dateModified":"2020-05-17T00:00:00-05:00","datePublished":"2020-05-17T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/17/selenium03.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/jupyter_notebook_blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://spiritlhl.github.io/jupyter_notebook_blogs/feed.xml" title="SpiritLHL's Python blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','2248958981','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/jupyter_notebook_blogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/jupyter_notebook_blogs/">SpiritLHL&#39;s Python blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/jupyter_notebook_blogs/about/">About Me</a><a class="page-link" href="/jupyter_notebook_blogs/search/">Search</a><a class="page-link" href="/jupyter_notebook_blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Selenium的web自动化操作03(语法补充)</h1><p class="page-description">Selenium的web自动化操作03(语法补充)</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-17T00:00:00-05:00" itemprop="datePublished">
+        May 17, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/jupyter_notebook_blogs/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="前言"><strong>前言</strong></h2>
+
+<p>需要下载Chrome或Firefox的driver，Chrome内核81.440与Firefox内核74.0下载链接如下：</p>
+
+<p><a href="https://spiritlhl.lanzous.com/icg1k3c">Firefox</a></p>
+
+<p><a href="https://spiritlhl.lanzous.com/icg1k0j">Chrome</a></p>
+
+<p>其他版本请在搜索引擎查找，本篇使用该版本，注意，driver下载后需要配置对应内核的游览器，电脑本身需要有该内核的游览器。</p>
+
+<hr />
+
+<h2 id="正文">正文</h2>
+
+<hr />
+
+<h2 id="xpath语法简介">Xpath语法简介</h2>
+
+<p>可以发现CSS选择元素非常灵活、强大。</p>
+
+<p>还有一种灵活、强大的选择元素的方式，就是使用Xpath表达式。</p>
+
+<p>XPath (XML Path Language) 是由国际标准化组织W3C指定的，用来在XML和HTML文档中选择节点的语言。</p>
+
+<p>目前主流浏览器 (chrome、firefox，edge，safari) 都支持XPath语法，xpath有 1 和 2 两个版本，目前浏览器支持的是 xpath 1的语法。</p>
+
+<p>既然已经有了CSS，为什么还要学习Xpath呢？因为</p>
+
+<p>有些场景用css选择web元素很麻烦，而xpath却比较方便。</p>
+
+<p>另外Xpath还有其他领域会使用到，比如爬虫框架Scrapy，手机App框架Appium。</p>
+
+<p>测试网址：http://cdn1.python3.vip/files/selenium/test1.html</p>
+
+<p>按F12打开调试窗口，点击Elements标签。</p>
+
+<p>要验证Xpath语法是否能成功选择元素，也可以像验证CSS语法那样，按组合键<code class="language-plaintext highlighter-rouge">Ctrl + F</code>就会出现搜索框</p>
+
+<p>xpath语法中，整个HTML文档根节点用’/‘表示，如果我们想选择的是根节点下面的html节点，则可以在搜索框输入</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/html
+</code></pre></div></div>
+<p>如果输入下面的表达式</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>/html/body/div
+</code></pre></div></div>
+<p>这个表达式表示选择html下面的body下面的div元素。</p>
+
+<p>注意<code class="language-plaintext highlighter-rouge">/</code>有点像CSS中的<code class="language-plaintext highlighter-rouge">&gt;</code>,表示直接子节点关系。</p>
+
+<hr />
+
+<h3 id="绝对路径选择">绝对路径选择</h3>
+
+<p>从根节点开始的，到某个节点，每层都依次写下来，每层之间用<code class="language-plaintext highlighter-rouge">/</code>分隔的表达式，就是某元素的绝对路径</p>
+
+<p>上面的xpath表达式<code class="language-plaintext highlighter-rouge">/html/body/div</code>，就是一个绝对路径的xpath表达式，等价于css表达式<code class="language-plaintext highlighter-rouge">html&gt;body&gt;div</code></p>
+
+<p>自动化程序要使用Xpath来选择web元素，应该调用WebDriver对象的方法<code class="language-plaintext highlighter-rouge">find_element_by_xpath</code>或者<code class="language-plaintext highlighter-rouge">find_elements_by_xpath</code>，像这样：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elements</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">find_elements_by_xpath</span><span class="p">(</span><span class="s">"/html/body/div"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="相对路径选择">相对路径选择</h3>
+
+<p>有的时候，我们需要选择网页中某个元素，不管它在什么位置 。</p>
+
+<p>比如，选择示例页面的所有标签名为<code class="language-plaintext highlighter-rouge">div</code>的元素，如果使用css表达式，直接写一个div就行了。</p>
+
+<p>那xpath怎么实现同样的功能呢？xpath需要前面加<code class="language-plaintext highlighter-rouge">//</code>, 表示从当前节点往下寻找所有的后代元素,不管它在什么位置。</p>
+
+<p>所以xpath表达式，应该这样写：<code class="language-plaintext highlighter-rouge">//div</code></p>
+
+<p>‘//’ 符号也可以继续加在后面,比如，要选择所有的<code class="language-plaintext highlighter-rouge">div</code>元素里面的所有的<code class="language-plaintext highlighter-rouge">p</code>元素 ，不管<code class="language-plaintext highlighter-rouge">div</code>在什么位置，也不管<code class="language-plaintext highlighter-rouge">p</code>元素在<code class="language-plaintext highlighter-rouge">div</code>下面的什么位置，则可以这样写<code class="language-plaintext highlighter-rouge">//div//p</code></p>
+
+<p>对应的自动化程序如下</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elements</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">find_elements_by_xpath</span><span class="p">(</span><span class="s">"//div//p"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>如果使用CSS选择器，对应代码如下</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elements</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">find_elements_by_css_selector</span><span class="p">(</span><span class="s">"div p"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>如果，要选择所有的<code class="language-plaintext highlighter-rouge">div</code>元素里面的直接子节点p，xpath就应该这样写了<code class="language-plaintext highlighter-rouge">//div/p</code></p>
+
+<p>如果使用CSS选择器，则为<code class="language-plaintext highlighter-rouge">div &gt; p</code></p>
+
+<hr />
+
+<h3 id="通配符">通配符</h3>
+
+<p>如果要选择所有div节点的所有直接子节点，可以使用表达式<code class="language-plaintext highlighter-rouge">//div/*</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">*</code>是一个通配符，对应任意节点名的元素，等价于CSS选择器<code class="language-plaintext highlighter-rouge">div &gt; *</code></p>
+
+<p>代码如下：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elements</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">find_elements_by_xpath</span><span class="p">(</span><span class="s">"//div/*"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">element</span><span class="p">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">'outerHTML'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="根据属性选择">根据属性选择</h3>
+
+<p>Xpath 可以根据属性来选择元素。</p>
+
+<p>根据属性来选择元素是通过这种格式来的<code class="language-plaintext highlighter-rouge">[@属性名='属性值']</code></p>
+
+<hr />
+
+<h5 id="注意">注意：</h5>
+
+<p>属性名注意前面有个@</p>
+
+<p>属性值一定要用引号，可以是单引号，也可以是双引号</p>
+
+<hr />
+
+<h4 id="根据id属性选择">根据id属性选择</h4>
+
+<p>选择id为west的元素，可以这样<code class="language-plaintext highlighter-rouge">//*[@id='west']</code></p>
+
+<hr />
+
+<h4 id="根据class属性选择">根据class属性选择</h4>
+
+<p>选择所有select元素中class为<code class="language-plaintext highlighter-rouge">single_choice</code>的元素，可以这样<code class="language-plaintext highlighter-rouge">//select[@class='single_choice']</code></p>
+
+<p>如果一个元素class有多个，比如</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;p id="beijing" class='capital huge-city'&gt;
+    北京
+&lt;/p&gt;
+</code></pre></div></div>
+
+<p>如果要选它，对应的xpath就应该是<code class="language-plaintext highlighter-rouge">//p[@class="capital huge-city"]</code></p>
+
+<p>不能只写一个属性，像这样<code class="language-plaintext highlighter-rouge">//p[@class="capital"]</code>则不行</p>
+
+<hr />
+
+<h4 id="根据其他属性">根据其他属性</h4>
+
+<p>同样的道理，我们也可以利用其它的属性选择</p>
+
+<p>比如选择具有multiple属性的所有页面元素，可以这样<code class="language-plaintext highlighter-rouge">//*[@multiple]</code></p>
+
+<hr />
+
+<h4 id="属性值包含字符串">属性值包含字符串</h4>
+
+<p>要选择style属性值包含color字符串的页面元素，可以这样<code class="language-plaintext highlighter-rouge">//*[contains(@style,'color')]</code></p>
+
+<p>要选择style属性值以color字符串开头的页面元素，可以这样<code class="language-plaintext highlighter-rouge">//*[starts-with(@style,'color')]</code></p>
+
+<p>style属性值以某个字符串结尾的页面元素，大家可以推测是<code class="language-plaintext highlighter-rouge">//*[ends-with(@style,'color')]</code>，但是很遗憾，这是xpath 2.0 的语法，目前浏览器都不支持。</p>
+
+<hr />
+
+<h4 id="按次序选择">按次序选择</h4>
+
+<p>前面学过css表达式可以根据元素在父节点中的次序选择，非常实用。</p>
+
+<p>xpath也可以根据次序选择元素。语法比css更简洁，直接在方括号中使用数字表示次序</p>
+
+<p>比如</p>
+
+<p>某类型<code class="language-plaintext highlighter-rouge">第几个</code>子元素</p>
+
+<p>比如</p>
+
+<p>要选择p类型第2个的子元素，就是</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//p[2]
+</code></pre></div></div>
+
+<p>注意，选择的是<code class="language-plaintext highlighter-rouge">p</code>类型第2个的子元素，不是第2个子元素，并且是<code class="language-plaintext highlighter-rouge">p</code>类型 。</p>
+
+<p>再比如，要选取父元素为<code class="language-plaintext highlighter-rouge">div</code>中的<code class="language-plaintext highlighter-rouge">p</code>类型<code class="language-plaintext highlighter-rouge">第2个</code>子元素</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//div/p[2]
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="第几个子元素">第几个子元素</h3>
+
+<p>也可以选择第2个子元素，不管是什么类型，采用通配符</p>
+
+<p>比如 选择父元素为div的第2个子元素，不管是什么类型</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//div/*[2]
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="某类型倒数第几个子元素">某类型倒数第几个子元素</h3>
+
+<p>当然也可以选取倒数第几个子元素</p>
+
+<p>比如：</p>
+
+<p>选取p类型倒数第1个子元素 —&gt; <code class="language-plaintext highlighter-rouge">//p[last()]</code>
+选取p类型倒数第2个子元素 —&gt; <code class="language-plaintext highlighter-rouge">//p[last()-1]</code>
+选择父元素为div中p类型倒数第3个子元素 —&gt;<code class="language-plaintext highlighter-rouge">//div/p[last()-2]</code></p>
+
+<hr />
+
+<h3 id="范围选择">范围选择</h3>
+
+<p>xpath还可以选择子元素的次序范围。</p>
+
+<p>比如，</p>
+
+<p>选取option类型第1到2个子元素</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//option[position()&lt;=2]
+</code></pre></div></div>
+<p>或者</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//option[position()&lt;3]
+</code></pre></div></div>
+
+<p>选择class属性为multi_choice的前3个子元素</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//*[@class='multi_choice']/*[position()&lt;=3]
+</code></pre></div></div>
+
+<p>选择class属性为multi_choice的后3个子元素</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>//*[@class='multi_choice']/*[position()&gt;=last()-2]
+</code></pre></div></div>
+
+<p>为什么不是 last()-3 呢？因为</p>
+
+<pre><code class="language-last()```本身代表最后一个元素">
+```last()-1```本身代表倒数第2个元素
+
+```last()-2```本身代表倒数第3个元素
+
+---
+
+### 组选择、父节点、兄弟节点
+
+---
+
+##### 组选择
+
+css有组选择，可以同时使用多个表达式，多个表达式选择的结果都是要选择的元素
+
+css组选择，表达式之间用逗号隔开
+
+xpath也有组选择，是用竖线隔开多个表达式
+
+比如，要选所有的option元素和所有的h4元素，可以使用
+</code></pre>
+<p>#xpath
+//option | //h4</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>等同于CSS选择器
+</code></pre></div></div>
+<p>#css
+option , h4</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+再比如，要选所有的```class```为```single_choice```和```class```为```multi_choice```的元素，可以使用
+</code></pre></div></div>
+<p>#xpath
+//<em>[@class=’single_choice’] | //</em>[@class=’multi_choice’]</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>等同于CSS选择器
+</code></pre></div></div>
+<p>#css
+.single_choice , .multi_choice</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+---
+
+### 选择父节点
+
+xpath可以选择父节点，这是css做不到的。
+
+某个元素的父节点用```/..```表示
+
+比如，要选择```id```为```china```的节点的父节点，可以这样写```//*[@id='china']/..``` 。
+
+当某个元素没有特征可以直接选择，但是它有子节点有特征， 就可以采用这种方法，先选择子节点，再指定父节点。
+
+
+还可以继续找上层父节点，比如```//*[@id='china']/../../..```
+
+---
+
+### 兄弟节点选择
+
+前面学过css选择器，要选择某个节点的后续兄弟节点，用波浪线
+
+xpath也可以选择后续兄弟节点，用这样的语法```following-sibling::```
+
+比如，要选择```class```为```single_choice```的元素的所有后续兄弟节点```//*[@class='single_choice']/following-sibling::*```
+
+等同于CSS选择器```.single_choice ~ *```
+
+如果，要选择后续节点中的div节点，就应该这样写```//*[@class='single_choice']/following-sibling::div```
+
+xpath还可以选择前面的兄弟节点，用这样的语法```preceding-sibling::```
+
+比如，要选择```class```为```single_choice```的元素的所有前面的兄弟节点```//*[@class='single_choice']/preceding-sibling::*```
+
+而CSS选择器目前还没有方法选择前面的兄弟节点
+
+要了解更多Xpath选择语法，可以点击[这里](https://www.w3school.com.cn/xpath/index.asp)，打开Xpath选择器参考手册
+
+---
+
+### selenium 注意点
+
+原代码：
+
+    先选择示例网页中，id是china的元素
+
+    然后通过这个元素的WebElement对象，使用find_elements_by_xpath，选择里面的p元素，
+
+```python
+# 先寻找id是china的元素
+china = wd.find_element_by_id('china')
+
+# 再选择该元素内部的p元素
+elements = china.find_elements_by_xpath('//p')
+
+# 打印结果
+for element in elements:
+    print('----------------')
+    print(element.get_attribute('outerHTML'))
+</code></pre></div></div>
+
+<p>运行发现，打印的不仅仅是china内部的p元素，而是所有的p元素。</p>
+
+<p>要在<strong>某个元素内部</strong>使用xpath选择元素，<strong>需要在xpath表达式最前面加个点</strong>。</p>
+
+<p>像这样</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elements</span> <span class="o">=</span> <span class="n">china</span><span class="p">.</span><span class="n">find_elements_by_xpath</span><span class="p">(</span><span class="s">'.//p'</span><span class="p">)</span>
+</code></pre></div></div>
+
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div><a class="u-url" href="/jupyter_notebook_blogs/markdown/2020/05/17/selenium03.html" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jupyter_notebook_blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/jupyter_notebook_blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personally explore Python&#39;s study notes.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/spiritLHL" title="spiritLHL"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/Dan.ajax" title="Dan.ajax"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

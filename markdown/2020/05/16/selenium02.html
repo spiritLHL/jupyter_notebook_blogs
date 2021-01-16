@@ -1,0 +1,839 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Selenium的web自动化操作02(基本语法) | SpiritLHL’s Python blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Selenium的web自动化操作02(基本语法)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Selenium的web自动化操作02(基本语法)" />
+<meta property="og:description" content="Selenium的web自动化操作02(基本语法)" />
+<link rel="canonical" href="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/16/selenium02.html" />
+<meta property="og:url" content="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/16/selenium02.html" />
+<meta property="og:site_name" content="SpiritLHL’s Python blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-16T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Selenium的web自动化操作02(基本语法)","url":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/16/selenium02.html","@type":"BlogPosting","headline":"Selenium的web自动化操作02(基本语法)","dateModified":"2020-05-16T00:00:00-05:00","datePublished":"2020-05-16T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/16/selenium02.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/jupyter_notebook_blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://spiritlhl.github.io/jupyter_notebook_blogs/feed.xml" title="SpiritLHL's Python blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','2248958981','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/jupyter_notebook_blogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/jupyter_notebook_blogs/">SpiritLHL&#39;s Python blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/jupyter_notebook_blogs/about/">About Me</a><a class="page-link" href="/jupyter_notebook_blogs/search/">Search</a><a class="page-link" href="/jupyter_notebook_blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Selenium的web自动化操作02(基本语法)</h1><p class="page-description">Selenium的web自动化操作02(基本语法)</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-16T00:00:00-05:00" itemprop="datePublished">
+        May 16, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      3 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/jupyter_notebook_blogs/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="前言"><strong>前言</strong></h2>
+
+<p>需要下载Chrome或Firefox的driver，Chrome内核81.440与Firefox内核74.0下载链接如下：</p>
+
+<p><a href="https://spiritlhl.lanzous.com/icg1k3c">Firefox</a></p>
+
+<p><a href="https://spiritlhl.lanzous.com/icg1k0j">Chrome</a></p>
+
+<p>其他版本请在搜索引擎查找，本篇使用该版本，注意，driver下载后需要配置对应内核的游览器，电脑本身需要有该内核的游览器。</p>
+
+<hr />
+
+<h2 id="正文">正文</h2>
+
+<hr />
+
+<h3 id="radio框">radio框</h3>
+
+<p>radio框选择选项，直接用WebElement的click方法，模拟用户点击就可以了。</p>
+
+<p>比如, 我们要在下面的html中：</p>
+
+<p>先打印当前选中的</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 获取当前选中的元素
+</span><span class="n">element</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span>
+  <span class="s">'#s_radio input[checked=checked]'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'当前选中的是: '</span> <span class="o">+</span> <span class="n">element</span><span class="p">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">'value'</span><span class="p">))</span>
+
+<span class="c1"># 点选
+</span><span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span>
+  <span class="s">'#s_radio input[value="小雷老师"]'</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="checkbox框">checkbox框</h3>
+
+<p>对checkbox进行选择，也是直接用<code class="language-plaintext highlighter-rouge">WebElement</code>的<code class="language-plaintext highlighter-rouge">click</code>方法，模拟用户点击选择。</p>
+
+<p>需要注意的是，要选中checkbox的一个选项，必须先获取当前该复选框的状态。 <br />
+如果该选项已经勾选了，就不能再点击。 <br />
+否则反而会取消选择。</p>
+
+<p>先把已经选中的选项全部点击一下，确保都是未选状态再点击要选的</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 先把 已经选中的选项全部点击一下
+</span><span class="n">elements</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">find_elements_by_css_selector</span><span class="p">(</span>
+  <span class="s">'#s_checkbox input[checked="checked"]'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+    <span class="n">element</span><span class="p">.</span><span class="n">click</span><span class="p">()</span>
+
+<span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span>
+  <span class="s">"#s_checkbox input[value='要选']"</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="select框">select框</h3>
+
+<p>radio框及checkbox框都是input元素，只是里面的type不同而已。</p>
+
+<p>select框 则是一个新的select标签，大家可以对照浏览器网页内容查看一下</p>
+
+<p>对于Select 选择框， Selenium 专门提供了一个 Select类 进行操作。</p>
+
+<p>Select类 提供了如下的方法</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select_by_value
+</code></pre></div></div>
+<p>根据选项的 value属性值 ，选择元素。</p>
+
+<p>比如，下面的HTML</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;option value="xxl"&gt;cool&lt;/option&gt;
+</code></pre></div></div>
+
+<p>就可以根据 xxl 这个值选择该选项</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span><span class="p">.</span><span class="n">select_by_value</span><span class="p">(</span><span class="s">'xxl'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select_by_index
+</code></pre></div></div>
+<p>根据选项的 次序 （从0开始），选择元素</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>select_by_visible_text
+</code></pre></div></div>
+<p>根据选项的 可见文本 ，选择元素。</p>
+
+<p>比如，下面的HTML：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;option value="xxl"&gt;cool&lt;/option&gt;
+</code></pre></div></div>
+
+<p>就可以根据 cool 这个内容，选择该选项</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">s</span><span class="p">.</span><span class="n">select_by_visible_text</span><span class="p">(</span><span class="s">'cool'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>deselect_by_value
+</code></pre></div></div>
+<p>根据选项的value属性值， 去除选中元素</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>deselect_by_index
+</code></pre></div></div>
+<p>根据选项的次序，去除选中元素</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>deselect_by_visible_text
+</code></pre></div></div>
+<p>根据选项的可见文本，去除选中元素</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>deselect_all
+</code></pre></div></div>
+<p>去除选中所有元素</p>
+
+<hr />
+
+<h3 id="select单选框">Select单选框</h3>
+
+<p>对于 select单选框，操作比较简单：<br />
+不管原来选的是什么，直接用Select方法选择即可。<br />
+例如，选择要选的，示例代码如下</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 导入Select类
+</span><span class="kn">from</span> <span class="nn">selenium.webdriver.support.ui</span> <span class="kn">import</span> <span class="n">Select</span>
+
+
+<span class="c1"># 创建Select对象（实例化）
+</span><span class="n">select</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">"要选id"</span><span class="p">))</span>
+
+<span class="c1"># 通过 Select 对象选中 要选选项
+</span><span class="n">select</span><span class="p">.</span><span class="n">select_by_visible_text</span><span class="p">(</span><span class="s">"要选选项"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="select多选框">Select多选框</h3>
+
+<p>对于select多选框，要选中某几个选项，要注意去掉原来已经选中的选项。</p>
+
+<p>例如，我们选择示例多选框中的 x1 和 x2</p>
+
+<p>可以用select类的<code class="language-plaintext highlighter-rouge">deselect_all</code>方法，清除所有 已经选中 的选项。</p>
+
+<p>然后再通过<code class="language-plaintext highlighter-rouge">select_by_visible_text</code>方法选择 x1 和 x2。</p>
+
+<p>示例代码如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 导入Select类
+</span><span class="kn">from</span> <span class="nn">selenium.webdriver.support.ui</span> <span class="kn">import</span> <span class="n">Select</span>
+
+<span class="c1"># 创建Select对象
+</span><span class="n">select</span> <span class="o">=</span> <span class="n">Select</span><span class="p">(</span><span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">"x"</span><span class="p">))</span>
+
+<span class="c1"># 清除所有 已经选中 的选项
+</span><span class="n">select</span><span class="p">.</span><span class="n">deselect_all</span><span class="p">()</span>
+
+<span class="c1"># 选择 x1 和 x2
+</span><span class="n">select</span><span class="p">.</span><span class="n">select_by_visible_text</span><span class="p">(</span><span class="s">"x1"</span><span class="p">)</span>
+<span class="n">select</span><span class="p">.</span><span class="n">select_by_visible_text</span><span class="p">(</span><span class="s">"x2"</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="actionchains类">ActionChains类</h3>
+
+<p>鼠标右键点击、双击、移动鼠标到某个元素、鼠标拖拽等。</p>
+
+<p>这些操作，可以通过Selenium提供的<code class="language-plaintext highlighter-rouge">ActionChains</code>类来实现。</p>
+
+<p><code class="language-plaintext highlighter-rouge">ActionChains</code>类里面提供了 一些特殊的动作的模拟，我们可以通过<code class="language-plaintext highlighter-rouge">ActionChains</code>类的代码查看到，如下所示</p>
+
+<p>我们以移动鼠标到某个元素为例。</p>
+
+<p>百度首页的右上角，有个选项</p>
+
+<p>网址：https://www.baidu.com/</p>
+
+<p>如果我们把鼠标放在上边，就会弹出下面的各种图标。</p>
+
+<p>使用<code class="language-plaintext highlighter-rouge">ActionChains</code>来模拟鼠标移动 操作的代码如下：</p>
+
+<p>(百度网站首页可能有变化，选择的类可能需要更改)</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="s">r'f:\chromedriver.exe'</span><span class="p">)</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.baidu.com/'</span><span class="p">)</span>
+
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.action_chains</span> <span class="kn">import</span> <span class="n">ActionChains</span>
+
+<span class="n">ac</span> <span class="o">=</span> <span class="n">ActionChains</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+
+<span class="c1"># 鼠标移动到 元素上
+</span><span class="n">ac</span><span class="p">.</span><span class="n">move_to_element</span><span class="p">(</span>
+    <span class="n">driver</span><span class="p">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'[name="tj_briicon"]'</span><span class="p">)</span>
+<span class="p">).</span><span class="n">perform</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>直接执行javascript</p>
+
+<p>我们可以直接让浏览器运行一段javascript代码，并且得到返回值，如下</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 直接执行 javascript，里面可以直接用return返回我们需要的数据
+</span><span class="n">nextPageButtonDisabled</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">execute_script</span><span class="p">(</span>
+    <span class="s">'''
+    ele = document.querySelector('.soupager &gt; button:last-of-type');
+    return ele.getAttribute('disabled')
+    '''</span><span class="p">)</span>
+
+<span class="c1"># 返回的数据转化为Python中的数据对象进行后续处理
+</span><span class="k">if</span> <span class="n">nextPageButtonDisabled</span> <span class="o">==</span> <span class="s">'disabled'</span><span class="p">:</span> <span class="c1"># 是最后一页
+</span>    <span class="k">return</span> <span class="bp">True</span>
+<span class="k">else</span><span class="p">:</span> <span class="c1"># 不是最后一页
+</span>    <span class="k">return</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="冻结界面">冻结界面</h3>
+
+<p>有些网站上面的元素，我们鼠标放在上面，会动态弹出一些内容。</p>
+
+<p>比如，百度首页的右上角，有个选项：<a href="https://www.baidu.com/">https://www.baidu.com/</a></p>
+
+<p>如果我们把鼠标放在上边，就会弹出很多图标。</p>
+
+<p>如果我们要用<code class="language-plaintext highlighter-rouge">selenium</code>自动化<code class="language-plaintext highlighter-rouge">点击</code>其中图标，就需要<code class="language-plaintext highlighter-rouge">F12</code>查看这个元素的特征。</p>
+
+<p>但是当我们的鼠标从图标移开，这个栏目就整个消失了，就没法查看其对应的HTML。</p>
+
+<p>怎么办？</p>
+
+<p>在开发者工具栏console里面执行如下js代码</p>
+
+<div class="language-js highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="nx">setTimeout</span><span class="p">(</span><span class="kd">function</span><span class="p">(){</span><span class="k">debugger</span><span class="p">},</span> <span class="mi">5000</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>这句JavaScript代码什么意思呢？</p>
+
+<p>表示在 5000毫秒后，执行<code class="language-plaintext highlighter-rouge">debugger</code>命令</p>
+
+<p>执行该命令会 浏览器会进入debug状态。debug状态有个特性，界面被冻住，不管我们怎么点击界面都不会触发事件。</p>
+
+<p>所以，我们可以在输入上面代码并回车 执行后，立即鼠标放在界面右上角图标处。</p>
+
+<p>这时候，就会弹出下面的各种图标。</p>
+
+<p>然后，我们仔细等待5秒到了以后，界面就会因为执行了<code class="language-plaintext highlighter-rouge">debugger</code>命令而被冻住。</p>
+
+<p>然后，我们就可以点击开发者工具栏的查看箭头，再去点击其中图标，查看其属性了。</p>
+
+<hr />
+
+<h3 id="弹出对话框">弹出对话框</h3>
+
+<p>有的时候，我们经常会在操作界面的时候，出现一些弹出的对话框。</p>
+
+<p>弹出的对话框有三种类型，分别是 Alert（警告信息）、confirm（确认信息）和prompt（提示输入）</p>
+
+<hr />
+
+<h3 id="alert">Alert</h3>
+
+<p>Alert 弹出框，目的就是显示通知信息，只需用户看完信息后，点击 OK（确定） 就可以了。</p>
+
+<p>那么，自动化的时候，代码怎么模拟用户点击 OK 按钮呢？</p>
+
+<p>selenium提供如下方法进行操作</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">accept</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>注意：如果我们不去点击它，页面的其它元素是不能操作的。</p>
+
+<p>如果程序要获取弹出对话框中的信息内容，可以通过如下代码</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">text</span>
+</code></pre></div></div>
+
+<p>示例代码如下</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">()</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://cdn1.python3.vip/files/selenium/test4.html'</span><span class="p">)</span>
+
+<span class="c1"># --- alert ---
+</span><span class="n">driver</span><span class="p">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'b1'</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+
+<span class="c1"># 打印 弹出框 提示信息
+</span><span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1"># 点击 OK 按钮
+</span><span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">accept</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="confirm">Confirm</h2>
+
+<p>Confirm弹出框，主要是让用户确认是否要进行某个操作。</p>
+
+<p>比如：当管理员在网站上选择删除某个账号时，就可能会弹出Confirm弹出框，要求确认是否确定要删除。</p>
+
+<p>Confirm弹出框 有两个选择供用户选择，分别是OK和Cancel，分别代表确定和取消操作。</p>
+
+<p>那么，自动化的时候，代码怎么模拟用户点击OK或者Cancel按钮呢？</p>
+
+<p>selenium提供如下方法进行操作</p>
+
+<p>如果我们想点击OK按钮，还是用刚才的accept方法，如下</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">accept</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>如果我们想点击 Cancel 按钮， 可以用 dismiss方法，如下</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">dismiss</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>示例代码如下</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">()</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://cdn1.python3.vip/files/selenium/test4.html'</span><span class="p">)</span>
+
+<span class="c1"># --- confirm ---
+</span><span class="n">driver</span><span class="p">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'b2'</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+
+<span class="c1"># 打印 弹出框 提示信息
+</span><span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1"># 点击 OK 按钮
+</span><span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">accept</span><span class="p">()</span>
+
+<span class="n">driver</span><span class="p">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'b2'</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+
+<span class="c1"># 点击 取消 按钮
+</span><span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">dismiss</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="prompt">Prompt</h3>
+
+<p>出现 Prompt 弹出框 是需要用户输入一些信息，提交上去。</p>
+
+<p>比如：当管理员在网站上选择给某个账号延期时，就可能会弹出 Prompt 弹出框， 要求输入延期多长时间。</p>
+
+<p>可以调用如下方法</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span><span class="p">.</span><span class="n">send_keys</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>示例代码如下</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">()</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://cdn1.python3.vip/files/selenium/test4.html'</span><span class="p">)</span>
+
+
+<span class="c1"># --- prompt ---
+</span><span class="n">driver</span><span class="p">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'b3'</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+
+<span class="c1"># 获取 alert 对象
+</span><span class="n">alert</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span>
+
+<span class="c1"># 打印 弹出框 提示信息
+</span><span class="k">print</span><span class="p">(</span><span class="n">alert</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1"># 输入信息，并且点击 OK 按钮 提交
+</span><span class="n">alert</span><span class="p">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">'web自动化 - selenium'</span><span class="p">)</span>
+<span class="n">alert</span><span class="p">.</span><span class="n">accept</span><span class="p">()</span>
+
+<span class="c1"># 点击 Cancel 按钮 取消
+</span><span class="n">driver</span><span class="p">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'b3'</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+<span class="n">alert</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">alert</span>
+<span class="n">alert</span><span class="p">.</span><span class="n">dismiss</span><span class="p">()</span>
+</code></pre></div></div>
+<p>注意：
+有些弹窗并非浏览器的alert 窗口，而是html元素，这种对话框，只需要通过之前介绍的选择器选中并进行相应的操作就可以了。</p>
+
+<hr />
+
+<h2 id="其他技巧">其他技巧</h2>
+
+<p>下面是一些其他的 Selenium 自动化技巧</p>
+
+<hr />
+
+<h3 id="窗口大小">窗口大小</h3>
+
+<p>有时间我们需要获取窗口的属性和相应的信息，并对窗口进行控制</p>
+
+<p>获取窗口大小</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">get_window_size</span><span class="p">()</span>
+</code></pre></div></div>
+<p>改变窗口大小</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">set_window_size</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="获取当前窗口标题">获取当前窗口标题</h3>
+
+<p>浏览网页的时候，我们的窗口标题是不断变化的，可以使用WebDriver的title属性来获取当前窗口的标题栏字符串。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">title</span>
+</code></pre></div></div>
+<p>获取当前窗口URL地址</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">current_url</span>
+</code></pre></div></div>
+<p>例如，访问网易，并获取当前窗口的标题和URL</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span>  <span class="n">webdriver</span>
+
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">()</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># 打开网站
+</span><span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.163.com'</span><span class="p">)</span>
+
+<span class="c1"># 获取网站标题栏文本
+</span><span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="p">.</span><span class="n">title</span><span class="p">)</span>
+
+<span class="c1"># 获取网站地址栏文本
+</span><span class="k">print</span><span class="p">(</span><span class="n">driver</span><span class="p">.</span><span class="n">current_url</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="截屏">截屏</h3>
+<p>有的时候，我们需要把浏览器屏幕内容保存为图片文件。</p>
+
+<p>比如，做自动化测试时，一个测试用例检查点发现错误，我们可以截屏为文件，以便测试结束时进行人工核查。</p>
+
+<p>可以使用<code class="language-plaintext highlighter-rouge">WebDriver</code>的<code class="language-plaintext highlighter-rouge">get_screenshot_as_file</code>方法来截屏并保存为图片。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span>  <span class="n">webdriver</span>
+
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">()</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># 打开网站
+</span><span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://www.baidu.com/'</span><span class="p">)</span>
+
+<span class="c1"># 截屏保存为图片文件
+</span><span class="n">driver</span><span class="p">.</span><span class="n">get_screenshot_as_file</span><span class="p">(</span><span class="s">'1.png'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="手机模式">手机模式</h3>
+
+<p>我们可以通过 desired_capabilities 参数，指定以手机模式打开chrome浏览器</p>
+
+<p>参考代码，如下</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="n">mobile_emulation</span> <span class="o">=</span> <span class="p">{</span> <span class="s">"deviceName"</span><span class="p">:</span> <span class="s">"Nexus 5"</span> <span class="p">}</span>
+
+<span class="n">chrome_options</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">ChromeOptions</span><span class="p">()</span>
+
+<span class="n">chrome_options</span><span class="p">.</span><span class="n">add_experimental_option</span><span class="p">(</span><span class="s">"mobileEmulation"</span><span class="p">,</span> <span class="n">mobile_emulation</span><span class="p">)</span>
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span> <span class="n">desired_capabilities</span> <span class="o">=</span> <span class="n">chrome_options</span><span class="p">.</span><span class="n">to_capabilities</span><span class="p">())</span>
+
+<span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://www.baidu.com'</span><span class="p">)</span>
+
+<span class="nb">input</span><span class="p">()</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="上传文件">上传文件</h3>
+
+<p>有时候，网站操作需要上传文件。</p>
+
+<p>比如，著名的在线图片压缩网站： https://tinypng.com/</p>
+
+<p>通常，网站页面上传文件的功能，是通过 type 属性 为 file 的 HTML input 元素实现的。</p>
+
+<p>如下所示：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;input type="file" multiple="multiple"&gt;
+</code></pre></div></div>
+<p>使用selenium自动化上传文件，我们只需要定位到该input元素，然后通过 send_keys 方法传入要上传的文件路径即可。</p>
+
+<p>如下所示：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1"># 先定位到上传文件的 input 元素
+</span><span class="n">ele</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'input[type=file]'</span><span class="p">)</span>
+
+<span class="c1"># 再调用 WebElement 对象的 send_keys 方法
+</span><span class="n">ele</span><span class="p">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">r'h:\g02.png'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>如果需要上传多个文件，可以多次调用send_keys，如下</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">ele</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'input[type=file]'</span><span class="p">)</span>
+<span class="n">ele</span><span class="p">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">r'h:\g01.png'</span><span class="p">)</span>
+<span class="n">ele</span><span class="p">.</span><span class="n">send_keys</span><span class="p">(</span><span class="s">r'h:\g02.png'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="自动化edge浏览器">自动化Edge浏览器</h3>
+
+<p>自动化基于Chromium内核的微软最新Edge浏览器，首先需要查看Edge的版本。</p>
+
+<p>点击菜单 帮助和反馈 &gt; 关于Microsoft Edge ，在弹出界面中，查看到版本，比如</p>
+
+<p>Microsoft Edge 是最新版本。
+版本 81.0.416.72 (官方内部版本) (64 位)</p>
+
+<p>然后<a href="https://developer.microsoft.com/en-us/microsoft-edge/tools/webdriver/#downloads">点击这里</a>，打开Edge浏览器驱动下载网页 ，并选择下载对应版本的驱动。</p>
+
+<p>在自动化代码中，指定使用<code class="language-plaintext highlighter-rouge">Edge Webdriver</code>类，并且指定<code class="language-plaintext highlighter-rouge">Edge</code>驱动路径，如下所示</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Edge</span><span class="p">(</span><span class="s">r'd:\tools\webdrivers\msedgedriver.exe'</span><span class="p">)</span>
+<span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://www.51job.com'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="自动化electron程序">自动化Electron程序</h3>
+
+<p>Electron程序都是基于基于Chromium技术开发的，所以基本也可以用Chromedriver驱动自动化。</p>
+
+<p>要自动化，首先需要得到内置Chromium的版本号。</p>
+
+<p>向开发人员查询打开 Dev Tools 窗口的快捷键（通常是ctrl + Shift + I），打开Dev Tools 窗口后， 在 Console tab中输入 如下语句，查看版本</p>
+
+<blockquote>
+  <p>navigator.appVersion.match(/.*Chrome\/([0-9.]+)/)[1]
+  “79.0.3945.130”</p>
+</blockquote>
+
+<p>然后去 chromedriver下载网址 ，下载对应版本的驱动。</p>
+
+<p>在自动化程序中需要指定打开的可执行程序为Electron程序，而不是 Chrome浏览器。</p>
+
+<p>如下所示</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.chrome.options</span> <span class="kn">import</span> <span class="n">Options</span>
+
+
+<span class="n">ops</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+
+<span class="c1"># 指定Electron程序路径
+</span><span class="n">ops</span><span class="p">.</span><span class="n">binary_location</span> <span class="o">=</span> <span class="s">r"C:\electronAPP.exe"</span>
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="s">r"e:\chromedriver.exe"</span><span class="p">,</span>
+                            <span class="n">options</span> <span class="o">=</span> <span class="n">ops</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="黑科技">黑科技</h2>
+
+<hr />
+
+<h3 id="使用代理">使用代理</h3>
+
+<p>selenium 自动化谷歌浏览器可以这样使用代理</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.common.proxy</span> <span class="kn">import</span> <span class="n">Proxy</span><span class="p">,</span> <span class="n">ProxyType</span>
+
+<span class="n">prox</span> <span class="o">=</span> <span class="n">Proxy</span><span class="p">()</span>
+<span class="n">prox</span><span class="p">.</span><span class="n">proxy_type</span> <span class="o">=</span> <span class="n">ProxyType</span><span class="p">.</span><span class="n">MANUAL</span>
+<span class="n">prox</span><span class="p">.</span><span class="n">http_proxy</span> <span class="o">=</span> <span class="s">"127.0.0.1:10800"</span>
+<span class="n">prox</span><span class="p">.</span><span class="n">ssl_proxy</span> <span class="o">=</span> <span class="s">"127.0.0.1:10800"</span>
+<span class="c1"># prox.socks_proxy = "127.0.0.1:10800"
+</span>
+<span class="n">capabilities</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">DesiredCapabilities</span><span class="p">.</span><span class="n">CHROME</span>
+<span class="n">prox</span><span class="p">.</span><span class="n">add_to_capabilities</span><span class="p">(</span><span class="n">capabilities</span><span class="p">)</span>
+
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">desired_capabilities</span><span class="o">=</span><span class="n">capabilities</span><span class="p">)</span>
+
+<span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://youtube.com'</span><span class="p">)</span>
+
+<span class="nb">input</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="使用缺省用户的profile运行浏览器">使用缺省用户的profile运行浏览器</h3>
+
+<p>前面我们selenium打开浏览器，都是创建一个临时的新的用户，在新的用户环境中运行自动化。</p>
+
+<p>如果我们想使用现有缺省用户的 profile运行浏览器自动化，可以这样</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.chrome.options</span> <span class="kn">import</span> <span class="n">Options</span>
+
+
+<span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="c1"># 缺省使用的是该目录下面的 Default目录里面保存的用户profile
+</span><span class="n">options</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">r'user-data-dir=c:\Users\baiyh\AppData\Local\Google\Chrome\User Data'</span><span class="p">)</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="自动化手工打开的chrome浏览器">自动化手工打开的Chrome浏览器</h3>
+
+<p>Selenium自动化打开的浏览器，每次都是使用全新的profile，有的网站用Selenium自动化，会有奇怪的问题（可能是profile的原因），比如不能登录，打开首页是空白等等。</p>
+
+<p>这时，我们可以</p>
+
+<p>1.关闭所有的Chrome浏览器</p>
+
+<p>2.找到chrome的安装目录，打开命令行窗口，cd进入该目录，</p>
+
+<p>3.输入如下命令，手动启动Chrome浏览器，指定debug端口。</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>chrome.exe --remote-debugging-port=9222
+</code></pre></div></div>
+
+<p>因为没有 –user-data-dir 参数，使用的是缺省用户profile。就是我们手动直接启动Chrome使用的profile。</p>
+
+<p>这一步，也可以不这么麻烦，参考<a href="https://stackoverflow.com/questions/51563287/how-to-make-chrome-always-launch-with-remote-debugging-port-flag/56457835#56457835">这篇文章</a>，修改chrome桌面快捷图标启动参数，修改后双击打开Chrome</p>
+
+<p>然后 手动操作浏览器网页，比如登录，进入到可以自动化的状态，</p>
+
+<p>然后，自动化程序中这样写</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.chrome.options</span> <span class="kn">import</span> <span class="n">Options</span>
+
+
+<span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="c1"># 指定Chrome的debug地址 和前面命令行中启动参数一致
+# 这样，就会直接自动化刚才启动的浏览器
+</span><span class="n">options</span><span class="p">.</span><span class="n">add_experimental_option</span><span class="p">(</span><span class="s">"debuggerAddress"</span><span class="p">,</span> <span class="s">"127.0.0.1:9222"</span><span class="p">)</span>
+
+<span class="n">wd</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+<span class="n">wd</span><span class="p">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="c1"># 下面接着写自动化的代码
+</span></code></pre></div></div>
+
+<hr />
+
+<h3 id="无头模式">无头模式</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">from</span> <span class="nn">selenium.webdriver.chrome.options</span> <span class="kn">import</span> <span class="n">Options</span>
+
+
+<span class="n">options</span> <span class="o">=</span> <span class="n">Options</span><span class="p">()</span>
+<span class="c1"># 设置为无头模式参数
+</span><span class="n">options</span><span class="p">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s">"--headless"</span><span class="p">)</span>
+<span class="n">driver</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="n">options</span><span class="o">=</span><span class="n">options</span><span class="p">)</span>
+
+<span class="n">driver</span><span class="p">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+
+<span class="n">driver</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://www.ahtba.org.cn/Category/Detail?id=568'</span><span class="p">)</span>
+
+<span class="n">eles</span> <span class="o">=</span> <span class="n">driver</span><span class="p">.</span><span class="n">find_elements_by_css_selector</span><span class="p">(</span><span class="s">'#night_7460 li a'</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">ele</span> <span class="ow">in</span> <span class="n">eles</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">ele</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div></div>
+
+
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div><a class="u-url" href="/jupyter_notebook_blogs/markdown/2020/05/16/selenium02.html" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jupyter_notebook_blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/jupyter_notebook_blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personally explore Python&#39;s study notes.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/spiritLHL" title="spiritLHL"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/Dan.ajax" title="Dan.ajax"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Appium自动化操作03(界面操作和adb命令) | SpiritLHL’s Python blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Appium自动化操作03(界面操作和adb命令)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Appium自动化操作03(界面操作和adb命令)" />
+<meta property="og:description" content="Appium自动化操作03(界面操作和adb命令)" />
+<link rel="canonical" href="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/24/appium03.html" />
+<meta property="og:url" content="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/24/appium03.html" />
+<meta property="og:site_name" content="SpiritLHL’s Python blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-24T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Appium自动化操作03(界面操作和adb命令)","url":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/24/appium03.html","@type":"BlogPosting","headline":"Appium自动化操作03(界面操作和adb命令)","dateModified":"2020-05-24T00:00:00-05:00","datePublished":"2020-05-24T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/24/appium03.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/jupyter_notebook_blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://spiritlhl.github.io/jupyter_notebook_blogs/feed.xml" title="SpiritLHL's Python blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','2248958981','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/jupyter_notebook_blogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/jupyter_notebook_blogs/">SpiritLHL&#39;s Python blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/jupyter_notebook_blogs/about/">About Me</a><a class="page-link" href="/jupyter_notebook_blogs/search/">Search</a><a class="page-link" href="/jupyter_notebook_blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Appium自动化操作03(界面操作和adb命令)</h1><p class="page-description">Appium自动化操作03(界面操作和adb命令)</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-24T00:00:00-05:00" itemprop="datePublished">
+        May 24, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/jupyter_notebook_blogs/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="前言">前言</h1>
+
+<p>最好有<code class="language-plaintext highlighter-rouge">Selenium</code>的Web自动化的实际经验</p>
+
+<p>运行基础：client库(0.52版本)，Appium Server，安卓SDK(含JDK环境)，USB调试模式下的手机(开发者模式)</p>
+
+<p>所用apk包(wv.apk)链接：</p>
+
+<p><a href="https://spiritlhl.lanzous.com/icxhm7g">https://spiritlhl.lanzous.com/icxhm7g</a></p>
+
+<hr />
+
+<h1 id="界面操作和adb命令">界面操作和adb命令</h1>
+
+<h3 id="click点击">click点击</h3>
+
+<p>最常见的操作之一，使用<code class="language-plaintext highlighter-rouge">WebElement</code>对象的<code class="language-plaintext highlighter-rouge">click</code>方法。</p>
+
+<hr />
+<h3 id="tap点按">tap点按</h3>
+
+<pre><code class="language-WebElement```对象的```tap```方法和```click```类似，都是点击界面。">
+但是最大的区别是，```tap```是针对```坐标```而不是针对找到的```元素```。
+
+为了保证自动化代码在所有分辨率的手机上都能正常执行，我们通常应该使用click方法。
+
+但有的时候，我们难以用通常的方法定位元素，可以用这个```tap```方法，根据坐标来点击
+
+用```inspect```查看该元素的属性中，有一个```bounds```属性吗？
+
+它就是表示元素的```左上角```，```右下角```坐标的坐标。
+
+我们还可以使用```UIAutomatorviewer```直接十字光标移动，看右边的属性提示。
+
+```tap```方法可以像这样进行调用
+
+```python
+driver.tap([(1100,1080),],700)
+</code></pre>
+
+<p>它有两个参数：</p>
+
+<p>第一个参数是个<code class="language-plaintext highlighter-rouge">列表</code>，表示点击的坐标。</p>
+
+<p>注意最多可以有<code class="language-plaintext highlighter-rouge">5个元素</code>，代表5根手指点击5个坐标。所以是<code class="language-plaintext highlighter-rouge">list</code>类型。</p>
+
+<p>如果我们只要模拟一根手指点击屏幕，list中只要一个元素就可以了</p>
+
+<p>第二个参数表示<code class="language-plaintext highlighter-rouge">tap</code>点按屏幕后停留的时间（毫秒）。</p>
+
+<p>如果点按时间过长，就变成了长按操作了。</p>
+
+<hr />
+
+<h3 id="输入">输入</h3>
+
+<p>最常见的操作之一，使用<code class="language-plaintext highlighter-rouge">WebElement</code>对象的<code class="language-plaintext highlighter-rouge">send_keys</code>方法。</p>
+
+<hr />
+
+<h3 id="获取界面文本信息">获取界面文本信息</h3>
+
+<p>可以通过<code class="language-plaintext highlighter-rouge">WebElement</code>对象的<code class="language-plaintext highlighter-rouge">.text</code>属性获取该对象的文本信息。</p>
+
+<hr />
+
+<h3 id="滑动">滑动</h3>
+
+<p>做移动app测试的时候，经常需要滑动界面。</p>
+
+<p>这需要使用<code class="language-plaintext highlighter-rouge">WebDriver</code>对象的<code class="language-plaintext highlighter-rouge">swipe</code>方法。</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">swipe</span><span class="p">(</span><span class="n">start_x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">start_y</span><span class="o">=</span><span class="n">y1</span><span class="p">,</span> <span class="n">end_x</span><span class="o">=</span><span class="n">x</span><span class="p">,</span> <span class="n">end_y</span><span class="o">=</span><span class="n">y2</span><span class="p">,</span> <span class="n">duration</span><span class="o">=</span><span class="mi">800</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>前面4个参数是<code class="language-plaintext highlighter-rouge">滑动起点</code>和<code class="language-plaintext highlighter-rouge">终点</code>的x、y坐标。</p>
+
+<p>第5个参数<code class="language-plaintext highlighter-rouge">duration</code>是滑动从起点到终点坐标所耗费的时间（毫秒）。</p>
+
+<p>注意这个时间非常重要，在屏幕上滑动同样的距离，如果时间设置的很短，就是快速的滑动。</p>
+
+<p>例如：一个翻动新闻的界面，快速的滑动，就会是扫动的动作，会导致内容随惯性滚动很多。</p>
+
+<hr />
+
+<h3 id="按键">按键</h3>
+
+<p>调用<code class="language-plaintext highlighter-rouge">press_keycode</code>方法，就能模拟<code class="language-plaintext highlighter-rouge">按键动作</code>，包括安卓手机的<code class="language-plaintext highlighter-rouge">实体</code>按键和<code class="language-plaintext highlighter-rouge">键盘</code>按钮。</p>
+
+<p>具体代码如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">appium.webdriver.extensions.android.nativekey</span> <span class="kn">import</span> <span class="n">AndroidKey</span>
+
+
+<span class="c1"># 输入回车键，确定搜索
+</span><span class="n">driver</span><span class="p">.</span><span class="n">press_keycode</span><span class="p">(</span><span class="n">AndroidKey</span><span class="p">.</span><span class="n">ENTER</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>按键的定义，可以参考这篇文档<a href="https://github.com/appium/python-client/blob/master/appium/webdriver/extensions/android/nativekey.py">https://github.com/appium/python-client/blob/master/appium/webdriver/extensions/android/nativekey.py</a></p>
+
+<hr />
+
+<h3 id="长按双击移动">长按、双击、移动</h3>
+
+<p>Appium的<code class="language-plaintext highlighter-rouge">TouchAction</code>类提供了更多的手机操作方法，如：长按、双击、移动</p>
+
+<p>参考源代码中的注释<a href="https://github.com/appium/python-client/blob/master/appium/webdriver/common/touch_action.py">https://github.com/appium/python-client/blob/master/appium/webdriver/common/touch_action.py</a></p>
+
+<p>下面有一个长按的例子</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">appium.webdriver.common.touch_action</span> <span class="kn">import</span> <span class="n">TouchAction</span>
+
+<span class="n">actions</span> <span class="o">=</span> <span class="n">TouchAction</span><span class="p">(</span><span class="n">driver</span><span class="p">)</span>
+<span class="n">actions</span><span class="p">.</span><span class="n">long_press</span><span class="p">(</span><span class="n">element</span><span class="p">)</span>
+<span class="n">actions</span><span class="p">.</span><span class="n">perform</span><span class="p">()</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="打开通知栏">打开通知栏</h3>
+
+<p>安卓手机，查看通知栏的动作可以是从屏幕顶端下滑来查看通知。</p>
+
+<p>也可以使用如下代码，直接打开通知栏</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">driver</span><span class="p">.</span><span class="n">open_notifications</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>通知栏里面的元素，自动化的方法和前面介绍的App界面元素自动化是一样的。</p>
+
+<hr />
+
+<h3 id="收起通知栏">收起通知栏</h3>
+
+<p>收起通知栏，可以使用前面介绍的模拟按键，发出<code class="language-plaintext highlighter-rouge">返回按键</code>的方法。</p>
+
+<hr />
+
+<h3 id="adb-命令">adb 命令</h3>
+
+<p><code class="language-plaintext highlighter-rouge">android sdk</code>里面有一个命令行工具<code class="language-plaintext highlighter-rouge">adb</code>。</p>
+
+<p><code class="language-plaintext highlighter-rouge">adb</code>全称<code class="language-plaintext highlighter-rouge">Android Debug Bridge</code>，这个<code class="language-plaintext highlighter-rouge">adb</code>使用非常广泛。</p>
+
+<p>它可以与<code class="language-plaintext highlighter-rouge">Android</code>手机设备进行通信，它可进行各种设备操作。</p>
+
+<p>如：安装应用和调试应用，传输文件，甚至登录到手机设备上shell的进行访问，就像远程登录一样</p>
+
+<p>这个<code class="language-plaintext highlighter-rouge">adb</code>在<code class="language-plaintext highlighter-rouge">sdk</code>的<code class="language-plaintext highlighter-rouge">platform-tools</code>目录下面，请大家确保路径在<code class="language-plaintext highlighter-rouge">Path环境变量</code>中。</p>
+
+<p>Appium对anroid的自动化非常依赖这个adb工具。执行自动化过程中，有很多内部操作，比如获取设备信息，传送文件到手机，安装apk，启动某些程序等，都是通常这个<code class="language-plaintext highlighter-rouge">adb</code>实现的。</p>
+
+<pre><code class="language-adb```命令既然是个命令，就可以使用```Python```的```os.system()```或者```subprocess```来自动化调用它，完成我们的各种自动化需求。">
+而自动化过程中，可能需要截屏手机，并且下载到指定目录中，可以在Python程序中这样写
+
+```python
+import os
+
+
+os.system('adb shell screencap /sdcard/screen3.png &amp;&amp; adb pull /sdcard/screen3.png')
+</code></pre>
+
+<p>特别的，还可以通过<code class="language-plaintext highlighter-rouge">adb</code>使用<code class="language-plaintext highlighter-rouge">am(activity manager)</code>和<code class="language-plaintext highlighter-rouge">pm(package manager)</code>两个工具，可以启动<code class="language-plaintext highlighter-rouge">Activity</code>、强行停止进程、广播<code class="language-plaintext highlighter-rouge">intent</code>、修改设备屏幕属性、列出应用、卸载应用等。</p>
+
+<p>adb命令的官方文档：<a href="https://developer.android.google.cn/studio/command-line/adb.html#devicestatus">https://developer.android.google.cn/studio/command-line/adb.html#devicestatus</a></p>
+
+<p>一些常见的adb命令：</p>
+
+<p>查看连接的设备</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb devices -l
+</code></pre></div></div>
+
+<p>查看文件目录</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb shell ls /sdcard
+</code></pre></div></div>
+
+<p>上传文件</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb push wv.apk /sdcard/wv.apk
+</code></pre></div></div>
+
+<p>下载文件</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb pull /sdcard/new.txt
+</code></pre></div></div>
+
+<p>截屏</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb shell screencap /sdcard/screen.png
+</code></pre></div></div>
+
+<p>截屏后的文件存在手机上，可以使用<code class="language-plaintext highlighter-rouge">adb pull</code>下载下来</p>
+
+<hr />
+
+<h3 id="shell">shell</h3>
+
+<p>登录到手机设备上shell的进行访问，就像远程登录一样，可用来在连接的设备上运行各种命令。</p>
+
+<p>输入<code class="language-plaintext highlighter-rouge">adb shell</code>然后执行各种安卓支持的<code class="language-plaintext highlighter-rouge">Linux命令</code>，比如<code class="language-plaintext highlighter-rouge">ps</code>、<code class="language-plaintext highlighter-rouge">netstat</code>、<code class="language-plaintext highlighter-rouge">netstat -an|grep 4724</code>、<code class="language-plaintext highlighter-rouge">pwd</code>、<code class="language-plaintext highlighter-rouge">ls</code>、<code class="language-plaintext highlighter-rouge">cd</code>、<code class="language-plaintext highlighter-rouge">rm</code>等。</p>
+
+<p>执行<code class="language-plaintext highlighter-rouge">quit</code>退出<code class="language-plaintext highlighter-rouge">shell</code></p>
+
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div><a class="u-url" href="/jupyter_notebook_blogs/markdown/2020/05/24/appium03.html" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jupyter_notebook_blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/jupyter_notebook_blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personally explore Python&#39;s study notes.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/spiritLHL" title="spiritLHL"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/Dan.ajax" title="Dan.ajax"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

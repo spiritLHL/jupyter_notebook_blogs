@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Matlab01(基础命令及函数) | SpiritLHL’s Python blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Matlab01(基础命令及函数)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Matlab01(基础命令及函数)" />
+<meta property="og:description" content="Matlab01(基础命令及函数)" />
+<link rel="canonical" href="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/07/01/Matlab01.html" />
+<meta property="og:url" content="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/07/01/Matlab01.html" />
+<meta property="og:site_name" content="SpiritLHL’s Python blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-07-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Matlab01(基础命令及函数)","url":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/07/01/Matlab01.html","@type":"BlogPosting","headline":"Matlab01(基础命令及函数)","dateModified":"2020-07-01T00:00:00-05:00","datePublished":"2020-07-01T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/07/01/Matlab01.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/jupyter_notebook_blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://spiritlhl.github.io/jupyter_notebook_blogs/feed.xml" title="SpiritLHL's Python blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','2248958981','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/jupyter_notebook_blogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/jupyter_notebook_blogs/">SpiritLHL&#39;s Python blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/jupyter_notebook_blogs/about/">About Me</a><a class="page-link" href="/jupyter_notebook_blogs/search/">Search</a><a class="page-link" href="/jupyter_notebook_blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Matlab01(基础命令及函数)</h1><p class="page-description">Matlab01(基础命令及函数)</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-07-01T00:00:00-05:00" itemprop="datePublished">
+        Jul 1, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/jupyter_notebook_blogs/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="基础命令">基础命令</h1>
+
+<p>1.打开文件夹</p>
+
+<p>命令行窗口输入</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>cd 文件夹名
+</code></pre></div></div>
+
+<p>这里推荐先在文件管理器先创建后打开</p>
+
+<hr />
+
+<p>2.赋值变量会在工作区显示</p>
+
+<p>可在命令行窗口输入<code class="language-plaintext highlighter-rouge">whos</code> 或 <code class="language-plaintext highlighter-rouge">who</code> <br />
+可以查看变量属性和具体参数</p>
+
+<hr />
+
+<p>3.清空数据</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>clear
+</code></pre></div></div>
+
+<hr />
+
+<p>4.设置文件搜索路径</p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/1b0aba8edf652.png" alt="" /></p>
+
+<hr />
+
+<p>5.数字类型转换</p>
+
+<p>class()函数可得数字类型</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>class(数字)
+</code></pre></div></div>
+
+<p><strong>整型转换</strong></p>
+
+<p>int8() #转换成有符号的8位整型</p>
+
+<p>uint8() #转换成无符号的8位整型</p>
+
+<p><strong>浮点型转换</strong></p>
+
+<p>数值数据默认为双精度型，可使用</p>
+
+<p>single函数：single(数字)转换成单精度型</p>
+
+<p>double函数：double(数字)转换成双精度型</p>
+
+<p><strong>复型</strong></p>
+
+<p><code class="language-plaintext highlighter-rouge">a+bi</code>或<code class="language-plaintext highlighter-rouge">a+bj</code></p>
+
+<p>real函数：取复型实部数据</p>
+
+<p>image函数：取复型虚部数据</p>
+
+<p><strong>format命令格式</strong></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>format long %输出长格式
+
+format %输出短格式
+
+format rat %输出有理数格式
+</code></pre></div></div>
+
+<p>这个不影响数据存储，只是表达方式不同</p>
+
+<p>ps:<code class="language-plaintext highlighter-rouge">%</code>是注释符号，按<code class="language-plaintext highlighter-rouge">ctrl+R</code>注释一行，<code class="language-plaintext highlighter-rouge">ctrl+T</code>取消一行注释</p>
+
+<hr />
+
+<p>6.常见函数</p>
+
+<p><strong>三角函数及取整函数</strong></p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/34fa13e83efaa.png" alt="" /></p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/eb8974fcfd129.png" alt="" /></p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/2dd0ac17dfecc.png" alt="" /></p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/8c3309c3dd235.png" alt="" /></p>
+
+<p><strong>实战及其他函数</strong></p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/b095473b81ff5.png" alt="" /></p>
+
+<p>rem(除数,被除数)函数取余数</p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/09dfa6f43181f.png" alt="" /></p>
+
+<p>isprime(n)函数判断n是否为素数，当n是素数时返回1，否则返回0</p>
+
+<p>find()函数找寻数组中的序列号</p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/011ba73d7e7ba.png" alt="" /></p>
+
+<hr />
+
+<p>7.预定义变量</p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/eb683aa55d530.png" alt="" /></p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/eb9ef8d19da54.png" alt="" /></p>
+
+<hr />
+
+<h1 id="简单矩阵的建立">简单矩阵的建立</h1>
+
+<p>1.直接输入法</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A=[1,2,3;4,5,6;7,8,9]
+</code></pre></div></div>
+
+<hr />
+
+<p>2.小矩阵拼接成大矩阵</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>A=[1,2,3;4,5,6;7,8,9]    
+B=[-1,-2,3;-4,5,-6;-7,-8,-9]     
+C=[A,B;B,A]  
+</code></pre></div></div>
+
+<p>效果图：</p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/0051c0de999f8.png" alt="" /></p>
+
+<hr />
+
+<p>3.用实部矩阵和虚部矩阵构成复数矩阵</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>B=[1,2,3;4,5,6]     
+C=[6,7,8;9,10,11]     
+A=B+i*C  
+</code></pre></div></div>
+
+<p>效果图：</p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/91a2326c76d7c.png" alt="" /></p>
+
+<hr />
+
+<h1 id="冒号表达式">冒号表达式</h1>
+
+<p><img src="https://pic.liesio.com/2020/07/01/9c0fd9256862f.png" alt="" /></p>
+
+<hr />
+
+<h1 id="结构矩阵和单元矩阵">结构矩阵和单元矩阵</h1>
+
+<p><img src="https://pic.liesio.com/2020/07/01/be15fbe252582.png" alt="" /></p>
+
+<p><img src="https://pic.liesio.com/2020/07/01/51ed61cad6093.png" alt="" /></p>
+
+<hr />
+
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div><a class="u-url" href="/jupyter_notebook_blogs/markdown/2020/07/01/Matlab01.html" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jupyter_notebook_blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/jupyter_notebook_blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personally explore Python&#39;s study notes.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/spiritLHL" title="spiritLHL"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/Dan.ajax" title="Dan.ajax"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

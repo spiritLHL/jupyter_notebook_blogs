@@ -1,0 +1,401 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Selenium的web自动化操作01(环境布置与标准流程) | SpiritLHL’s Python blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Selenium的web自动化操作01(环境布置与标准流程)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Selenium的web自动化操作01(环境布置与标准流程)" />
+<meta property="og:description" content="Selenium的web自动化操作01(环境布置与标准流程)" />
+<link rel="canonical" href="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/10/selenium01.html" />
+<meta property="og:url" content="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/10/selenium01.html" />
+<meta property="og:site_name" content="SpiritLHL’s Python blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-10T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Selenium的web自动化操作01(环境布置与标准流程)","url":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/10/selenium01.html","@type":"BlogPosting","headline":"Selenium的web自动化操作01(环境布置与标准流程)","dateModified":"2020-05-10T00:00:00-05:00","datePublished":"2020-05-10T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/10/selenium01.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/jupyter_notebook_blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://spiritlhl.github.io/jupyter_notebook_blogs/feed.xml" title="SpiritLHL's Python blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','2248958981','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/jupyter_notebook_blogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/jupyter_notebook_blogs/">SpiritLHL&#39;s Python blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/jupyter_notebook_blogs/about/">About Me</a><a class="page-link" href="/jupyter_notebook_blogs/search/">Search</a><a class="page-link" href="/jupyter_notebook_blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Selenium的web自动化操作01(环境布置与标准流程)</h1><p class="page-description">Selenium的web自动化操作01(环境布置与标准流程)</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-10T00:00:00-05:00" itemprop="datePublished">
+        May 10, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/jupyter_notebook_blogs/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h3 id="前言">前言</h3>
+
+<p>需要下载Chrome或Firefox的driver，Chrome内核81.440与Firefox内核74.0下载链接如下：</p>
+
+<p><a href="https://spiritlhl.lanzous.com/icg1k3c">Firefox</a></p>
+
+<p><a href="https://spiritlhl.lanzous.com/icg1k0j">Chrome</a></p>
+
+<p>其他版本请在搜索引擎查找，本篇使用该版本，注意，driver下载后需要配置对应内核的游览器，电脑本身需要有该内核的游览器。</p>
+
+<hr />
+
+<h3 id="web自动化操作流程">web自动化操作流程</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<span class="n">wd</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="s">r'C:\chromedriver.exe'</span><span class="p">)</span>
+<span class="s">'''
+wd.get('https://www.baidu.com')
+#webdriver类选择的是整个页面
+element = wd.find_element_by_id("kw")
+#class，name，id(id比较精确)
+#通过webelement对象进行操作
+element.send_keys('csdn')#输入  如果输入csdn</span><span class="se">\n</span><span class="s">可以模拟回车键
+element = wd.find_element_by_id('su')#点击搜索
+element.click()#点击
+'''</span>
+<span class="n">wd</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'https://blog.csdn.net/spiritLHL/article/details/105252792?ops_request_misc=%257B%2522request%255Fid%2522%253A%2522158864611119724848300006%2522%252C%2522scm%2522%253A%252220140713.130102334.pc%255Fall.57677%2522%257D&amp;request_id=158864611119724848300006&amp;biz_id=0&amp;utm_medium=distribute.pc_search_result.none-task-blog-2~all~first_rank_v2~rank_v25-1'</span><span class="p">)</span>
+<span class="c1">#elements = wd.find_element_by_class_name("blog-content-box")
+#time.sleep(2)#模拟点击等待的时间(找不找得到都会等待)
+</span><span class="n">wd</span><span class="p">.</span><span class="n">implicitly_wait</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span><span class="c1">#更方便的等待时间(找不到元素才会等待)
+</span><span class="n">elements</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">"p"</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">e</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+<span class="c1">#print(elements.get_attribute('href'))
+</span><span class="n">wd</span><span class="p">.</span><span class="n">close</span><span class="p">()</span><span class="c1">#关闭游览器
+</span></code></pre></div></div>
+
+<hr />
+
+<h3 id="find_element和find_elements的区别">find_element和find_elements的区别</h3>
+
+<p>使用find_elements选择的是符合条件的所有元素，如果没有符合条件的元素，回空列表 <br />
+使用find_element选择的是符合条件的第一个元素，如果没有符合条件的元素，抛出异常</p>
+
+<p>获取属性值—&gt;   <code class="language-plaintext highlighter-rouge">element.get_attribute('href')</code></p>
+
+<p>获取整个元素对应html—&gt;   <code class="language-plaintext highlighter-rouge">elements.get_attribute('outerHTML')</code></p>
+
+<p>获取某元素内所有html文本内容—&gt;  <code class="language-plaintext highlighter-rouge">elements.get_attribute('innerHTML')</code></p>
+
+<p>获取输入框内的文本内容—&gt;   <code class="language-plaintext highlighter-rouge">elements.get_attribute('value')</code></p>
+
+<hr />
+
+<h4 id="获取元素文本内容">获取元素文本内容</h4>
+
+<p>通过WebElement对象的text属性，可以获取元素展示在界面上的文本内容。</p>
+
+<p>但是，有时候，元素的文本内容没有展示在界面上，或者没有完全完全展示在界面上。这时用WebElement的text属性,获取文本内容，就会有问题。</p>
+
+<p>出现这种情况，可以尝试使用</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">element</span><span class="p">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">'innerText'</span><span class="p">)</span>
+</code></pre></div></div>
+<p>或者</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">element</span><span class="p">.</span><span class="n">get_attribute</span><span class="p">(</span><span class="s">'textContent'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h2 id="css选择器">css选择器</h2>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_css_selector</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>CSS Selector同样可以根据tag名、id 属性和class属性来选择元素`。</p>
+
+<p>根据tag名选择元素的CSS Selector语法非常简单，直接写上tag名即可。</p>
+
+<p>比如要选择所有的tag名为div的元素,就可以是这样</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elements</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">find_elements_by_css_selector</span><span class="p">(</span><span class="s">'div'</span><span class="p">)</span>
+</code></pre></div></div>
+<p>等价于</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">elements</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">find_elements_by_tag_name</span><span class="p">(</span><span class="s">'div'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="根据属性值定位">根据属性值定位</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">element</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_css_selector</span><span class="p">(</span><span class="s">'[href="http://ww.miitbeian.gov.cn"]'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+<h3 id="验证所找元素是否正确书写格式">验证所找元素是否正确书写格式</h3>
+
+<p>在开发者工具中按ctrl+f，输入所写格式，若存在着会高亮显示  <br />
+css选择某个class的所有，写 .class0 (表示选中名为class0的所有标签)   <br />
+css选择两个不同名class(都选中)(中间写英文逗号）写  .class1 , .class2   <br />
+逗号左右的属性类型可以不同</p>
+
+<hr />
+
+<h3 id="父元素">父元素</h3>
+
+<hr />
+
+<h5 id="父元素的第几个某类型的子节点">父元素的第几个某类型的子节点</h5>
+<p>我们可以指定选择的元素是<code class="language-plaintext highlighter-rouge">父元素的第几个某类型的子节点</code>(要选择元素的上一层级为父节点)
+使用 <code class="language-plaintext highlighter-rouge">nth-of-type</code><br />
+比如，我们要选择class1和class2的第几个元素， <br />
+可以像上面那样思考：选择的是第2个子元素，并且是span类型
+所以这样可以这样写 <code class="language-plaintext highlighter-rouge">span:nth-child(2)</code>  <br />
+还可以这样思考，选择的是第1个span类型的子元素
+所以也可以这样写 <code class="language-plaintext highlighter-rouge">span:nth-of-type(1)</code></p>
+
+<hr />
+
+<h5 id="父元素的倒数第几个某类型的子节点">父元素的倒数第几个某类型的子节点</h5>
+<p>当然也可以反过来，选择父元素的倒数第几个某类型的子节点
+使用 <code class="language-plaintext highlighter-rouge">nth-last-of-type</code><br />
+像这样</p>
+<pre><code class="language-p:nth-last-of-type(2)```">
+---
+
+#### 相邻兄弟节点选择
+上面的例子里面，我们要选择我们要选择class1和class2的第几个元素，
+还有一种思考方法，就是选择h3后面紧跟着的兄弟节点span。
+这就是一种相邻兄弟关系，可以这样写```h3 + span```
+表示元素紧跟关系的是加号
+
+---
+
+#### 后续所有兄弟节点选择
+如果要选择是选择 h3 后面所有的兄弟节点span可以这样写 ```h3 ~ span```
+
+---
+
+### 内嵌
+
+内嵌html页面的，使用wd.switch_to.frame(frame_reference)切换到内嵌
+页面进行操作。   
+其中，```frame_reference```可以是```frame```元素的属性```name```或者```ID```。       
+比如这里，就可以填写```iframe```元素的id```'frame1'``` 或者```name```属性值```'innerFrame'```。   
+像这样   
+```python
+wd.switch_to.frame('frame1')
+</code></pre>
+<p>或者</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wd</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="s">'innerFrame'</span><span class="p">)</span>
+</code></pre></div></div>
+<p>也可以填写<code class="language-plaintext highlighter-rouge">frame</code>所对应的<code class="language-plaintext highlighter-rouge">WebElement</code>对象。 <br />
+我们可以根据<code class="language-plaintext highlighter-rouge">frame</code>的元素位置或者属性特性，使用<code class="language-plaintext highlighter-rouge">find</code>系列的方法，选择到该元素，得到对应的<code class="language-plaintext highlighter-rouge">WebElement</code>对象  <br />
+比如，这里就可以写</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wd</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_tag_name</span><span class="p">(</span><span class="s">"iframe"</span><span class="p">))</span>
+</code></pre></div></div>
+<p>然后，就可以进行后续操作<code class="language-plaintext highlighter-rouge">frame</code>里面的元素了。   <br />
+上面的例子的正确代码如下</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+
+<span class="n">wd</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="s">r'd:\webdrivers\chromedriver.exe'</span><span class="p">)</span>
+<span class="n">wd</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://cdn1.python3.vip/files/selenium/sample2.html'</span><span class="p">)</span>
+
+<span class="c1"># 先根据name属性值 'innerFrame'，切换到iframe中
+</span><span class="n">wd</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="s">'innerFrame'</span><span class="p">)</span>
+
+<span class="c1"># 根据 class name 选择元素，返回的是 一个列表
+</span><span class="n">elements</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">find_elements_by_class_name</span><span class="p">(</span><span class="s">'plant'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">element</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1">#如果我们已经切换到某个iframe里面进行操作了，那么后续选择和操作界面元素 就都是在这个frame里面进行的。
+</span>
+<span class="c1">#这时候，如果我们又需要操作主html（我们把最外部的html称之为主html）里面的元素了呢？
+</span>
+<span class="c1">#怎么切换回原来的主html呢？
+</span>
+<span class="c1">#很简单，写如下代码即可
+</span>
+<span class="n">wd</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">default_content</span><span class="p">()</span>
+<span class="c1">#例如，在上面 代码 操作完 frame里面的元素后， 需要 点击 主html 里面的按钮，就可以这样写
+</span>
+<span class="kn">from</span> <span class="nn">selenium</span> <span class="kn">import</span> <span class="n">webdriver</span>
+
+<span class="n">wd</span> <span class="o">=</span> <span class="n">webdriver</span><span class="p">.</span><span class="n">Chrome</span><span class="p">(</span><span class="s">r'd:\webdrivers\chromedriver.exe'</span><span class="p">)</span>
+
+<span class="n">wd</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="s">'http://cdn1.python3.vip/files/selenium/sample2.html'</span><span class="p">)</span>
+
+<span class="c1"># 先根据name属性值 'innerFrame'，切换到iframe中
+</span><span class="n">wd</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">frame</span><span class="p">(</span><span class="s">'innerFrame'</span><span class="p">)</span>
+
+<span class="c1"># 根据 class name 选择元素，返回的是 一个列表
+</span><span class="n">elements</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">find_elements_by_class_name</span><span class="p">(</span><span class="s">'plant'</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">element</span> <span class="ow">in</span> <span class="n">elements</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">element</span><span class="p">.</span><span class="n">text</span><span class="p">)</span>
+
+<span class="c1"># 切换回 最外部的 HTML 中
+</span><span class="n">wd</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">default_content</span><span class="p">()</span>
+
+<span class="c1"># 然后再 选择操作 外部的 HTML 中 的元素
+</span><span class="n">wd</span><span class="p">.</span><span class="n">find_element_by_id</span><span class="p">(</span><span class="s">'outerbutton'</span><span class="p">).</span><span class="n">click</span><span class="p">()</span>
+
+<span class="n">wd</span><span class="p">.</span><span class="n">quit</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>如果我们要到新的窗口里面操作，该怎么做呢？  <br />
+可以使用<code class="language-plaintext highlighter-rouge">Webdriver</code>对象的<code class="language-plaintext highlighter-rouge">switch_to</code>属性的<code class="language-plaintext highlighter-rouge">window</code>方法，如下所示：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wd</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">window</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+</code></pre></div></div>
+<p>其中，参数<code class="language-plaintext highlighter-rouge">handle</code>需要传入什么呢？  <br />
+WebDriver对象有<code class="language-plaintext highlighter-rouge">window_handles</code>属性，这是一个列表对象，里面包括了当前浏览器里面所有的窗口句柄。 <br />
+所谓句柄，大家可以想象成对应网页窗口的一个ID，   <br />
+那么我们就可以通过类似下面的代码，</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">for</span> <span class="n">handle</span> <span class="ow">in</span> <span class="n">wd</span><span class="p">.</span><span class="n">window_handles</span><span class="p">:</span>
+    <span class="c1"># 先切换到该窗口
+</span>    <span class="n">wd</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">window</span><span class="p">(</span><span class="n">handle</span><span class="p">)</span>
+    <span class="c1"># 得到该窗口的标题栏字符串，判断是不是我们要操作的那个窗口
+</span>    <span class="k">if</span> <span class="s">'Bing'</span> <span class="ow">in</span> <span class="n">wd</span><span class="p">.</span><span class="n">title</span><span class="p">:</span>
+        <span class="c1"># 如果是，那么这时候WebDriver对象就是对应的该该窗口，正好，跳出循环，
+</span>        <span class="k">break</span>
+</code></pre></div></div>
+<p>上面代码的用意就是：   <br />
+我们依次获取<code class="language-plaintext highlighter-rouge">wd.window_handles</code>里面的所有句柄对象，并且调用<code class="language-plaintext highlighter-rouge">wd.switch_to.window(handle)</code>方法，切入到每个窗口，然后检查里面该窗口对象的属性(可以是标题栏，地址栏)判断是不是我们要操作的那个窗口，如果是，就跳出循环。  <br />
+同样的，如果我们在新窗口操作结束后， 还要回到原来的窗口，该怎么办？ <br />
+我们可以仍然使用上面的方法，依次切入窗口，然后根据标题栏之类的属性值判断。  <br />
+还有更省事的方法:    <br />
+因为我们一开始就在原来的窗口里面，我们知道进入新窗口操作完后，还要回来，可以事先保存该老窗口的句柄，使用如下方法 <br />
+(mainWindow变量保存当前窗口的句柄)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">mainWindow</span> <span class="o">=</span> <span class="n">wd</span><span class="p">.</span><span class="n">current_window_handle</span>
+</code></pre></div></div>
+
+<p>切换到新窗口操作完后，就可以直接像下面这样，将driver对应的对象返回到原来的窗口
+(通过前面保存的老窗口的句柄，自己切换到老窗口)</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">wd</span><span class="p">.</span><span class="n">switch_to</span><span class="p">.</span><span class="n">window</span><span class="p">(</span><span class="n">mainWindow</span><span class="p">)</span>
+</code></pre></div></div>
+
+<hr />
+
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div><a class="u-url" href="/jupyter_notebook_blogs/markdown/2020/05/10/selenium01.html" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jupyter_notebook_blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/jupyter_notebook_blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personally explore Python&#39;s study notes.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/spiritLHL" title="spiritLHL"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/Dan.ajax" title="Dan.ajax"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

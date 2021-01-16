@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Appium自动化操作01(环境安装与初始结构) | SpiritLHL’s Python blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Appium自动化操作01(环境安装与初始结构)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Appium自动化操作01(环境安装与初始结构)" />
+<meta property="og:description" content="Appium自动化操作01(环境安装与初始结构)" />
+<link rel="canonical" href="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/23/appium01.html" />
+<meta property="og:url" content="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/23/appium01.html" />
+<meta property="og:site_name" content="SpiritLHL’s Python blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-23T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Appium自动化操作01(环境安装与初始结构)","url":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/23/appium01.html","@type":"BlogPosting","headline":"Appium自动化操作01(环境安装与初始结构)","dateModified":"2020-05-23T00:00:00-05:00","datePublished":"2020-05-23T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/23/appium01.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/jupyter_notebook_blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://spiritlhl.github.io/jupyter_notebook_blogs/feed.xml" title="SpiritLHL's Python blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','2248958981','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/jupyter_notebook_blogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/jupyter_notebook_blogs/">SpiritLHL&#39;s Python blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/jupyter_notebook_blogs/about/">About Me</a><a class="page-link" href="/jupyter_notebook_blogs/search/">Search</a><a class="page-link" href="/jupyter_notebook_blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Appium自动化操作01(环境安装与初始结构)</h1><p class="page-description">Appium自动化操作01(环境安装与初始结构)</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-23T00:00:00-05:00" itemprop="datePublished">
+        May 23, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      2 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/jupyter_notebook_blogs/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h1 id="前言">前言</h1>
+
+<p>最好有<code class="language-plaintext highlighter-rouge">Selenium</code>的Web自动化的实际经验</p>
+
+<p>本篇用到的相关软件链接：</p>
+
+<p>链接: https://pan.baidu.com/s/126x-AgLKvM7qSJqdOzAAHA</p>
+
+<p>提取码: h9b2</p>
+
+<hr />
+<h1 id="appium-基础知识">Appium 基础知识</h1>
+
+<p><strong>Appium 用途和特点</strong></p>
+
+<p>Appium 是一个移动 App （手机应用）自动化工具。</p>
+
+<p>手机APP自动化有什么用？</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>自动化完成一些重复性的任务
+</code></pre></div></div>
+
+<p>比如</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>微信客服机器人
+
+爬虫
+
+自动化测试
+</code></pre></div></div>
+
+<p>爬虫就是通过手机自动化爬取信息。</p>
+
+<p>为什么不通过网页、HTTP 爬取呢？</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>有的系统没有网页，也不方便通过HTTP爬取
+</code></pre></div></div>
+
+<p>自动化测试</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>很多软件开发里面有这样的需求
+</code></pre></div></div>
+
+<p>Appium 自动化方案的特点：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>开源免费
+
+支持多个平台
+
+iOS （苹果）、安卓 App 的自动化都支持。
+
+支持多种类型的自动化
+
+支持 苹果、安卓 应用 原生界面 的自动化
+
+支持 应用 内嵌 WebView 的自动化
+
+支持 手机浏览器 中的 web网站自动化
+
+支持 flutter 应用的自动化
+
+支持多种编程语言
+</code></pre></div></div>
+
+<p>像 Selenium 一样，Appium可以用多种编程语言调用它开发自动化程序。</p>
+
+<hr />
+
+<h1 id="自动化原理">自动化原理</h1>
+
+<p>Appium自动化的原理图:</p>
+
+<p><img src="https://pic.liesio.com/2020/05/23/c90f8b49b6e01.jpg" alt="" /></p>
+
+<p>它和Selenium原理图很像。因为Appium自动化架构借鉴了Selenium。</p>
+
+<p>它包含了3个主体部分：自动化程序、Appium Server、移动设备</p>
+
+<hr />
+
+<p><strong>自动化程序</strong></p>
+
+<p>自动化程序是由我们来开发的，实现具体的手机自动化功能。</p>
+
+<p>要发出具体的指令控制手机，也需要使用客户端库。</p>
+
+<p>和Selenium一样，Appium 组织也提供了多种编程语言的客户端库，包括 java，python，js， ruby等，方便不同编程语言的开发者使用。</p>
+
+<p>首先需要安装好客户端库，调用这些库，就可以发出自动化指令给手机。</p>
+
+<hr />
+
+<p><strong>Appium Server</strong></p>
+
+<p>Appium Server 是 Appium 组织开发的程序，它负责管理手机自动化环境，并且转发自动化程序的控制指令给手机，并且转发手机给自动化程序的响应消息。</p>
+
+<hr />
+
+<p><strong>手机设备</strong></p>
+
+<p>这里说的手机设备，其实不仅仅是手机，包括所有苹果、安卓的移动设备，比如：手机、平板、智能手表等。</p>
+
+<p>为了直观方便的讲解，这里我们简称：手机</p>
+
+<p>当然手机上也包含了我们要自动化控制的手机应用APP。</p>
+
+<p>手机设备为什么能接收并且处理自动化指令呢？</p>
+
+<p>因为，Appium Server 会在手机上安装一个自动化代理程序，代理程序会等待自动化指令，并且执行自动化指令</p>
+
+<p>PS:这里使用手机端的自动化代理后你的键盘会无法弹出，只能接受电脑控制输入，手机键盘输入与电脑输入不能并存</p>
+
+<p>比如：要模拟用户点击界面按钮，Appium自动化系统的流程是这样的：</p>
+
+<p><code class="language-plaintext highlighter-rouge">自动化程序</code>调用客户端库相应的函数，发送<code class="language-plaintext highlighter-rouge">点击元素</code>的指令（封装在HTTP消息里）给<code class="language-plaintext highlighter-rouge">Appium Server</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">Appium Server</code>再转发这个指令给<code class="language-plaintext highlighter-rouge">手机上的自动化代理</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">手机上的自动化代理</code>接收到<code class="language-plaintext highlighter-rouge">指令</code>后，调用手机平台的自动化库，执行点击操作，返回点击成功的结果给 <code class="language-plaintext highlighter-rouge">Appium Server</code></p>
+
+<p><code class="language-plaintext highlighter-rouge">Appium Server</code>转发给<code class="language-plaintext highlighter-rouge">自动化程序</code></p>
+
+<pre><code class="language-自动化程序```了解到本操作成功后，继续后面的自动化流程">
+其中，自动化代理控制，使用的什么库来实现自动化的呢？
+
+如果测试的是苹果手机， 用的是苹果的 XCUITest 框架 （IOS9.3版本以后）
+
+如果测试的是安卓手机，用的是安卓的 UIAutomator 框架 (Android4.2以后)
+
+这些自动化框架提供了在手机设备上运行的库，可以让程序调用这些库，像人一样自动化操控设备和APP，比如：点击、滑动，模拟各种按键消息等。
+
+---
+
+# 自动化环境搭建
+
+这里以安卓APP的自动化为例。
+
+环境搭建需要下载安装不少软件，而且还有不少是国外网站下载的。
+
+这些软件```安装包```都放在```前言```的百度网盘链接中了，请自行下载。
+
+---
+
+1.安装client第三方库
+
+首先需要在开发环境下下载appium-python-client库，也可以用pip安装，如下(pip默认下载最新库，要指定特殊版本，要在后面加上==特殊版本名)
+
+PS:这里的appium-python-client库有特殊版本要求，需要安装的是```0.52```版本，不是```1.0```版本以上，否则会报错，建议使用Pycharm环境
+
+</code></pre>
+<p>pip install appium-python-client==0.52</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+---
+
+2.安装Appium Server
+
+Appium Server 是用 nodejs 运行的，基于js开发出来的。
+
+Appium组织为了方便软件安装使用，制作了一个可执行程序 Appium Desktop，把nodejs 运行环境、Appium Server 和一些工具打包在里面了，只需要简单的下载安装就可以了。
+
+可以从```前言```给出的百度网盘里下载安装： 
+
+Appium-windows-1.15.1.exe
+
+Appium Desktop官方下载链接：
+
+[https://github.com/appium/appium-desktop/releases/tag/v1.15.1](https://github.com/appium/appium-desktop/releases/tag/v1.15.1)
+
+---
+
+3.安装JDK
+
+安卓APP的自动化，必须要安装安卓SDK(后面会提到)，而安卓SDK需要JDK环境。
+
+可以从```前言```给出的百度网盘里下载安装： 
+
+jdk-8u211-windows-x64.exe
+
+安装好之后，还需要添加一个环境变量```JAVA_HOME```，指定值为```jdk安装目录```，比如
+
+JAVA_HOME   D:\Javajdk
+
+实际情况如下：
+
+![](https://pic.liesio.com/2020/05/23/b00d24eaac905.png)
+
+---
+
+4.安装Android SDK
+
+对于安卓APP的自动化，Appium Server是需要Android SDK的。
+
+因为要用到里面的一些工具，比如要执行命令设置手机、传送文件、安装应用、查看手机界面等。
+
+可以从```前言```给出的百度网盘里下载Android SDK文件包： ```androidsdk.zip```，并且解压，即可。
+
+解压完成后，需要配置一下添加一个环境变量 ```ANDROID_HOME```，设置值为sdk包解压目录，比如 ```D:\androidsdk```添加步骤参照第三步的图
+
+
+另外，还推荐大家配置环境变量```PATH```，加入```adb```所在目录， ```D:\安卓dk\androidsdk\androidsdk\platform-tools\```
+
+实际情况如下：
+
+![](https://pic.liesio.com/2020/05/23/e0f7ebf71e4d7.png)
+
+注意：是```添加```该目录到环境变量PATH中，不是替换!否则会导致系统命令都找不到的严重后果，```双击2处使用新建添加！```。
+
+---
+
+5.连接手机
+
+上述的软件环境都准备好以后，要自动化手机APP，需要：
+
+在你运行程序的电脑上用```USB线```连接上你的安卓手机
+
+进入手机设置 -&gt; 关于手机，不断点击```版本号```菜单（大概7次以上）进入开发者模式
+
+退出到上级菜单，在设置首页里点系统与更新，在系统与更新的开发者模式中，启动USB调试
+
+如果手机连接USB线后，手机界面弹出是否选择允许USB调试，请选择是。
+
+注意：
+
+有的手机系统，可能需要一些额外的选项需要设置好。
+
+比如，有的手机，开发者选项里需要打开允许通过USB安装应用等。
+
+总之，给USB开发调试尽可能方便的控制手机。
+
+连接好以后，打开命令行窗口，执行```adb devices -l```命令来列出连接在电脑上的安卓设备。
+
+如果输出类似如下的内容：
+
+</code></pre></div></div>
+<p>List of devices attached
+MGFNW19731015276       device product:HLK-AL00 model:HLK_AL00 device:HWHLK-H transport_id:1</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>
+表示电脑上可以查看到连接的设备，就可以运行自动化程序了。
+
+---
+
+# 第一个例子
+
+运行代码前，首先得运行```Appium Desktop```
+
+```python
+from appium import webdriver
+from appium.webdriver.extensions.android.nativekey import AndroidKey
+
+desired_caps = {
+  'platformName': 'Android', # 被测手机是安卓
+  'platformVersion': '10', # 手机安卓版本，这个需要在设置里的关于手机里查找，注意是Android版本，不是MIUI等系统版本
+  'deviceName': 'HLK-AL00', # 设备名，安卓手机可以随意填写
+  'appPackage': 'tv.danmaku.bili', # 启动APP Package名称
+  'appActivity': '.ui.splash.SplashActivity', # 启动Activity名称
+  'unicodeKeyboard': True, # 使用自带输入法，输入中文时填True
+  'resetKeyboard': True, # 执行完程序恢复原来输入法
+  'noReset': True,       # 不要重置App
+  'newCommandTimeout': 6000, #服务自动断开时间
+  'automationName' : 'UiAutomator2'#服务协议
+}
+
+# 连接Appium Server，初始化自动化环境
+driver = webdriver.Remote('http://localhost:4723/wd/hub', desired_caps)
+
+# 设置等待时间
+driver.implicitly_wait(5)
+
+# 如果有`青少年保护`界面，点击`我知道了`
+iknow = driver.find_elements_by_id("text3")
+if iknow:
+    iknow.click()
+
+# 根据id定位搜索位置框，点击
+driver.find_element_by_id("expand_search").click()
+
+# 根据id定位搜索输入框，点击
+sbox = driver.find_element_by_id('search_src_text')
+sbox.send_keys('祈LHL')
+
+# 输入回车键，确定搜索
+driver.press_keycode(AndroidKey.ENTER)
+
+# 选择（定位）所有视频标题
+eles = driver.find_elements_by_id("title")
+
+for ele in eles:
+    # 打印标题
+    print(ele.text)
+
+input('**** Press to quit..')
+driver.quit()
+</code></pre></div></div>
+
+<hr />
+
+<h1 id="查找应用package和activity">查找应用<code class="language-plaintext highlighter-rouge">Package</code>和<code class="language-plaintext highlighter-rouge">Activity</code></h1>
+
+<p>1.应用已安装</p>
+
+<p>如果应用已经安装在手机上了，可以直接打开手机上该应用，进入到你要操作的界面</p>
+
+<p>然后在cmd执行</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>adb shell dumpsys activity recents | find "intent={"
+</code></pre></div></div>
+<p>会显示如下，最近的几个<code class="language-plaintext highlighter-rouge">activity</code>信息，</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>    intent={act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=tv.danmaku.bili/.ui.splash.SplashActivity}
+    intent={act=android.intent.action.MAIN cat=[android.intent.category.HOME] flg=0x10010000 pkg=com.huawei.android.launcher cmp=com.huawei.android.launcher/.unihome.UniHomeLauncher}
+    intent={act=android.intent.action.MAIN cat=[android.intent.category.LAUNCHER] flg=0x10200000 cmp=com.android.settings/.HWSettings}
+    intent={act=android.intent.action.MAIN flg=0x10840000 hwFlg=0x4100 cmp=com.android.incallui/.InCallActivity}
+
+</code></pre></div></div>
+
+<p>其中第一行就是当前的应用，我们特别关注最后</p>
+
+<p>cmp=tv.danmaku.bili/.ui.splash.SplashActivity
+应用的package名称就是 tv.danmaku.bili</p>
+
+<p>应用的启动Activity就是 .ui.splash.SplashActivity</p>
+
+<p>2.有apk但是没有安装到手机端</p>
+
+<p>如果你已经获取到了<code class="language-plaintext highlighter-rouge">apk</code>，在cmd命令行窗口执行</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>D:\安卓dk\androidsdk\build-tools\29.0.3\aapt.exe dump badging D:\apk\bili.apk | find "package: name="
+</code></pre></div></div>
+<p>输出信息中，就有应用的package名称</p>
+
+<p>PS:第一串链接里的<code class="language-plaintext highlighter-rouge">D:\安卓dk</code>是我解压<code class="language-plaintext highlighter-rouge">androidsdk.zip</code>压缩包的地址；第二串链接里的<code class="language-plaintext highlighter-rouge">D:\apk\bili.apk</code>是指的是我D盘的apk文件夹下有一个<code class="language-plaintext highlighter-rouge">bili.apk</code>的apk文件</p>
+
+<p>输出结果：</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>package: name='tv.danmaku.bili' versionCode='5531000' versionName='5.53.1' platformBuildVersionName='5.53.1' compileSdkVersion='28' compileSdkVersionCodename='9'
+</code></pre></div></div>
+
+<p>在命令行窗口执行</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>D:\安卓dk\androidsdk\build-tools\29.0.3\aapt.exe dump badging d:\tools\apk\bili.apk | find "launchable-activity"
+</code></pre></div></div>
+
+<p>输出信息中，就有应用的启动Activity</p>
+
+<p>输出结果：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>launchable-activity: name='tv.danmaku.bili.ui.splash.SplashActivity'  label='' icon=''
+</code></pre></div></div>
+
+
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div><a class="u-url" href="/jupyter_notebook_blogs/markdown/2020/05/23/appium01.html" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jupyter_notebook_blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/jupyter_notebook_blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personally explore Python&#39;s study notes.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/spiritLHL" title="spiritLHL"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/Dan.ajax" title="Dan.ajax"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
