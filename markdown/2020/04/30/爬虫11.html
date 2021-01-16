@@ -1,0 +1,578 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>爬虫流程及方法11(PyQuery解析网页篇)(全) | SpiritLHL’s Python blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="爬虫流程及方法11(PyQuery解析网页篇)(全)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="爬虫流程及方法11(PyQuery解析网页篇)(全)" />
+<meta property="og:description" content="爬虫流程及方法11(PyQuery解析网页篇)(全)" />
+<link rel="canonical" href="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/04/30/%E7%88%AC%E8%99%AB11.html" />
+<meta property="og:url" content="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/04/30/%E7%88%AC%E8%99%AB11.html" />
+<meta property="og:site_name" content="SpiritLHL’s Python blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-04-30T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"爬虫流程及方法11(PyQuery解析网页篇)(全)","url":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/04/30/%E7%88%AC%E8%99%AB11.html","@type":"BlogPosting","headline":"爬虫流程及方法11(PyQuery解析网页篇)(全)","dateModified":"2020-04-30T00:00:00-05:00","datePublished":"2020-04-30T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/04/30/%E7%88%AC%E8%99%AB11.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/jupyter_notebook_blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://spiritlhl.github.io/jupyter_notebook_blogs/feed.xml" title="SpiritLHL's Python blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','2248958981','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/jupyter_notebook_blogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/jupyter_notebook_blogs/">SpiritLHL&#39;s Python blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/jupyter_notebook_blogs/about/">About Me</a><a class="page-link" href="/jupyter_notebook_blogs/search/">Search</a><a class="page-link" href="/jupyter_notebook_blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">爬虫流程及方法11(PyQuery解析网页篇)(全)</h1><p class="page-description">爬虫流程及方法11(PyQuery解析网页篇)(全)</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-04-30T00:00:00-05:00" itemprop="datePublished">
+        Apr 30, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      4 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/jupyter_notebook_blogs/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h2 id="前言">前言</h2>
+
+<p>本篇鸣谢 清华——尹成 的整理收集</p>
+
+<p>PyQuery文档<a href="https://www.osgeo.cn/pyquery/index.html">https://www.osgeo.cn/pyquery/index.html</a></p>
+
+<p>PyQuery库也是一个非常强大又灵活的网页解析库，如果你有前端开发经验的，都应该接触过jQuery,那么PyQuery就是你非常绝佳的选择，PyQuery 是 Python 仿照 jQuery 的严格实现。语法与 jQuery 几乎完全相同，所以不用再去费心去记一些奇怪的方法了。  <br />
+官网地址:<a href="http://pyquery.readthedocs.io/en/latest/">http://pyquery.readthedocs.io/en/latest/</a>     <br />
+jQuery参考文档:<a href="http://jquery.cuishifeng.cn/">http://jquery.cuishifeng.cn/</a></p>
+
+<h3 id="初始化">初始化</h3>
+
+<p>初始化的时候一般有三种传入方式：传入字符串，传入url,传入文件</p>
+
+<p><em>字符串初始化</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div&gt;
+    &lt;ul&gt;
+         &lt;li class="item-0"&gt;first item&lt;/li&gt;
+         &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+     &lt;/ul&gt;
+&lt;/div&gt;
+'''</span>
+
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">doc</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">doc</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">doc</span><span class="p">(</span><span class="s">'li'</span><span class="p">))</span>
+
+</code></pre></div></div>
+
+<p>结果如下：</p>
+
+<p><img src="https://pic.liesio.com/2020/04/29/ba8b877c7e7e7.png" alt="1" /></p>
+
+<p>由于PyQuery写起来比较麻烦，所以我们导入的时候都会添加别名： <br />
+from pyquery import PyQuery as pq <br />
+这里我们可以知道上述代码中的doc其实就是一个pyquery对象，我们可以通过doc可以进行元素的选择，其实这里就是一个css选择器，所以CSS选择器的规则都可以用，直接doc(标签名)就可以获取所有的该标签的内容，如果想要获取class 则doc(‘.class_name’),如果是id则doc(‘#id_name’)….</p>
+
+<p><em>URL初始化</em></p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="s">"http://www.baidu.com"</span><span class="p">,</span><span class="n">encoding</span><span class="o">=</span><span class="s">'utf-8'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">doc</span><span class="p">(</span><span class="s">'head'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p><em>文件初始化</em></p>
+
+<p>我们在pq()这里可以传入url参数也可以传入文件参数，当然这里的文件通常是一个html文件。  <br />
+例如：pq(filename=’index.html’)</p>
+
+<h3 id="基本的css选择器">基本的CSS选择器</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div id="container"&gt;
+    &lt;ul class="list"&gt;
+         &lt;li class="item-0"&gt;first item&lt;/li&gt;
+         &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+     &lt;/ul&gt;
+ &lt;/div&gt;
+'''</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">doc</span><span class="p">(</span><span class="s">'#container .list li'</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>这里我们需要注意的一个地方是doc(‘#container .list li’)，这里的三者之间的并不是必须要挨着，只要是层级关系就可以,下面是常用的CSS选择器方法：</p>
+
+<p><img src="https://pic.liesio.com/2020/04/29/b5a5f51927ac0.png" alt="2" /></p>
+
+<h3 id="查找元素">查找元素</h3>
+
+<p><em>子元素</em> <br />
+children,find<br />
+代码例子：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div id="container"&gt;
+    &lt;ul class="list"&gt;
+         &lt;li class="item-0"&gt;first item&lt;/li&gt;
+         &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+     &lt;/ul&gt;
+ &lt;/div&gt;
+'''</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.list'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">items</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">items</span><span class="p">)</span>
+<span class="n">lis</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">'li'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">lis</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">lis</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>运行结果如下</p>
+
+<p><img src="https://pic.liesio.com/2020/04/29/adbf8b4ab3269.png" alt="3" /></p>
+
+<p>从结果里我们也可以看出通过pyquery找到结果其实还是一个pyquery对象，可以继续查找，上述中的代码中的items.find(‘li’) 则表示查找ul里的所有的li标签
+当然这里通过children可以实现同样的效果,并且通过.children方法得到的结果也是一个pyquery对象</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">li</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="n">children</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">li</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>同时在children里也可以用CSS选择器<br />
+li2 = items.children(‘.active’) print(li2)<br />
+<em>父元素</em><br />
+parent,parents方法<br />
+通过.parent就可以找到父元素的内容，例子如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div id="container"&gt;
+    &lt;ul class="list"&gt;
+         &lt;li class="item-0"&gt;first item&lt;/li&gt;
+         &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+         &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+     &lt;/ul&gt;
+ &lt;/div&gt;
+'''</span>
+
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.list'</span><span class="p">)</span>
+<span class="n">container</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="n">parent</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">container</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">container</span><span class="p">)</span>
+
+</code></pre></div></div>
+<p>通过.parents就可以找到祖先节点的内容，例子如下：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div class="wrap"&gt;
+    &lt;div id="container"&gt;
+        &lt;ul class="list"&gt;
+             &lt;li class="item-0"&gt;first item&lt;/li&gt;
+             &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+         &lt;/ul&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+'''</span>
+
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+
+
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">items</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.list'</span><span class="p">)</span>
+<span class="n">parents</span> <span class="o">=</span> <span class="n">items</span><span class="p">.</span><span class="n">parents</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">parents</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">parents</span><span class="p">)</span>
+</code></pre></div></div>
+<p>结果如下： <br />
+从结果我们可以看出返回了两部分内容，一个是的父节点的信息，一个是父节点的父节点的信息即祖先节点的信息</p>
+
+<p><img src="https://pic.liesio.com/2020/04/29/f82d49527826d.png" alt="4" /></p>
+
+<p>同样我们通过.parents查找的时候也可以添加css选择器来进行内容的筛选</p>
+
+<p><em>兄弟元素</em></p>
+
+<p>siblings</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div class="wrap"&gt;
+    &lt;div id="container"&gt;
+        &lt;ul class="list"&gt;
+             &lt;li class="item-0"&gt;first item&lt;/li&gt;
+             &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+         &lt;/ul&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+'''</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">li</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.list .item-0.active'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">.</span><span class="n">siblings</span><span class="p">())</span>
+
+</code></pre></div></div>
+
+<p>代码中doc(‘.list .item-0.active’) 中的.tem-0和.active是紧挨着的，所以表示是并的关系，这样满足条件的就剩下一个了：thired item的那个标签了<br />
+这样在通过.siblings就可以获取所有的兄弟标签，当然这里是不包括自己的<br />
+同样的在.siblings()里也是可以通过CSS选择器进行筛选</p>
+
+<p><em>遍历</em></p>
+
+<p>单个元素</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div class="wrap"&gt;
+    &lt;div id="container"&gt;
+        &lt;ul class="list"&gt;
+             &lt;li class="item-0"&gt;first item&lt;/li&gt;
+             &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+         &lt;/ul&gt;
+     &lt;/div&gt;
+&lt;/div&gt;
+'''</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">li</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.item-0.active'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+
+<span class="n">lis</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'li'</span><span class="p">).</span><span class="n">items</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">lis</span><span class="p">))</span>
+<span class="k">for</span> <span class="n">li</span> <span class="ow">in</span> <span class="n">lis</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">li</span><span class="p">))</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>运行结果如下：</p>
+
+<p><img src="https://pic.liesio.com/2020/04/29/9d22dd913a0f4.png" alt="5" /></p>
+
+<p>从结果中我们可以看出通过items()可以得到一个生成器，并且我们通过for循环得到的每个元素依然是一个pyquery对象。</p>
+
+<h3 id="获取信息">获取信息</h3>
+
+<p><em>获取属性</em></p>
+
+<p>pyquery对象.attr(属性名)<br />
+pyquery对象.attr.属性名</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div class="wrap"&gt;
+    &lt;div id="container"&gt;
+        &lt;ul class="list"&gt;
+             &lt;li class="item-0"&gt;first item&lt;/li&gt;
+             &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+         &lt;/ul&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+'''</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.item-0.active a'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">attr</span><span class="p">(</span><span class="s">'href'</span><span class="p">))</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">attr</span><span class="p">.</span><span class="n">href</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p><img src="https://pic.liesio.com/2020/04/29/3d16423ac2a91.png" alt="6" /></p>
+
+<p>所以这里我们也可以知道获得属性值的时候可以直接a.attr(属性名)或者a.attr.属性名</p>
+
+<p><em>获取文本</em></p>
+
+<p>在很多时候我们是需要获取被html标签包含的文本信息,通过.text()就可以获取文本信息</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div class="wrap"&gt;
+    &lt;div id="container"&gt;
+        &lt;ul class="list"&gt;
+             &lt;li class="item-0"&gt;first item&lt;/li&gt;
+             &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+         &lt;/ul&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+'''</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">a</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.item-0.active a'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">text</span><span class="p">())</span>
+ 
+</code></pre></div></div>
+<p>结果如下：</p>
+
+<p><img src="https://pic.liesio.com/2020/04/29/cb44f196b165e.png" alt="7" /></p>
+
+<p><em>获取html</em></p>
+
+<p>我们通过.html()的方式可以获取当前标签所包含的html信息，例子如下</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div class="wrap"&gt;
+    &lt;div id="container"&gt;
+        &lt;ul class="list"&gt;
+             &lt;li class="item-0"&gt;first item&lt;/li&gt;
+             &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+         &lt;/ul&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+'''</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">li</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.item-0.active'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">.</span><span class="n">html</span><span class="p">())</span>
+
+</code></pre></div></div>
+
+<p>结果如下：</p>
+
+<p><img src="https://pic.liesio.com/2020/04/29/cacdd3db6b0cb.png" alt="8" /></p>
+
+<h3 id="dom操作">DOM操作</h3>
+
+<p>addClass、removeClass <br />
+熟悉前端操作的话，通过这两个操作可以添加和删除属性</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div class="wrap"&gt;
+    &lt;div id="container"&gt;
+        &lt;ul class="list"&gt;
+             &lt;li class="item-0"&gt;first item&lt;/li&gt;
+             &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+         &lt;/ul&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+'''</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">li</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.item-0.active'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+<span class="n">li</span><span class="p">.</span><span class="n">removeClass</span><span class="p">(</span><span class="s">'active'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+<span class="n">li</span><span class="p">.</span><span class="n">addClass</span><span class="p">(</span><span class="s">'active'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+
+</code></pre></div></div>
+<p>attr,css
+同样的我们可以通过attr给标签添加和修改属性，
+如果之前没有该属性则是添加，如果有则是修改
+我们也可以通过css添加一些css属性，这个时候，标签的属性里会多一个style属性</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div class="wrap"&gt;
+    &lt;div id="container"&gt;
+        &lt;ul class="list"&gt;
+             &lt;li class="item-0"&gt;first item&lt;/li&gt;
+             &lt;li class="item-1"&gt;&lt;a href="link2.html"&gt;second item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0 active"&gt;&lt;a href="link3.html"&gt;&lt;span class="bold"&gt;third item&lt;/span&gt;&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-1 active"&gt;&lt;a href="link4.html"&gt;fourth item&lt;/a&gt;&lt;/li&gt;
+             &lt;li class="item-0"&gt;&lt;a href="link5.html"&gt;fifth item&lt;/a&gt;&lt;/li&gt;
+         &lt;/ul&gt;
+     &lt;/div&gt;
+ &lt;/div&gt;
+'''</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">li</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.item-0.active'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+<span class="n">li</span><span class="p">.</span><span class="n">attr</span><span class="p">(</span><span class="s">'name'</span><span class="p">,</span> <span class="s">'link'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+<span class="n">li</span><span class="p">.</span><span class="n">css</span><span class="p">(</span><span class="s">'font-size'</span><span class="p">,</span> <span class="s">'14px'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">li</span><span class="p">)</span>
+
+</code></pre></div></div>
+
+<p>结果如下</p>
+
+<p><img src="https://pic.liesio.com/2020/04/29/4999462149acb.png" alt="9" /></p>
+
+<p>remove <br />
+有时候我们获取文本信息的时候可能并列的会有一些其他标签干扰，这个时候通过remove就可以将无用的或者干扰的标签直接删除，从而方便操作</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">html</span> <span class="o">=</span> <span class="s">'''
+&lt;div class="wrap"&gt;
+    Hello, World
+    &lt;p&gt;This is a paragraph.&lt;/p&gt;
+ &lt;/div&gt;
+'''</span>
+<span class="kn">from</span> <span class="nn">pyquery</span> <span class="kn">import</span> <span class="n">PyQuery</span> <span class="k">as</span> <span class="n">pq</span>
+<span class="n">doc</span> <span class="o">=</span> <span class="n">pq</span><span class="p">(</span><span class="n">html</span><span class="p">)</span>
+<span class="n">wrap</span> <span class="o">=</span> <span class="n">doc</span><span class="p">(</span><span class="s">'.wrap'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="n">wrap</span><span class="p">.</span><span class="n">text</span><span class="p">())</span>
+<span class="n">wrap</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">'p'</span><span class="p">).</span><span class="n">remove</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="n">wrap</span><span class="p">.</span><span class="n">text</span><span class="p">())</span>
+
+</code></pre></div></div>
+
+<p>结果如下：</p>
+
+<p><img src="https://pic.liesio.com/2020/04/29/f7a6912c9b7c9.png" alt="10" /></p>
+
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div><a class="u-url" href="/jupyter_notebook_blogs/markdown/2020/04/30/%E7%88%AC%E8%99%AB11.html" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jupyter_notebook_blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/jupyter_notebook_blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personally explore Python&#39;s study notes.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/spiritLHL" title="spiritLHL"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/Dan.ajax" title="Dan.ajax"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

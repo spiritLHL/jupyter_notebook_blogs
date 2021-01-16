@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>爬虫流程及方法02(Beautiful Soup解析页面) | SpiritLHL’s Python blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="爬虫流程及方法02(Beautiful Soup解析页面)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="爬虫流程及方法02(Beautiful Soup解析页面)" />
+<meta property="og:description" content="爬虫流程及方法02(Beautiful Soup解析页面)" />
+<link rel="canonical" href="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/03/31/%E7%88%AC%E8%99%AB02.html" />
+<meta property="og:url" content="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/03/31/%E7%88%AC%E8%99%AB02.html" />
+<meta property="og:site_name" content="SpiritLHL’s Python blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-03-31T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"爬虫流程及方法02(Beautiful Soup解析页面)","url":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/03/31/%E7%88%AC%E8%99%AB02.html","@type":"BlogPosting","headline":"爬虫流程及方法02(Beautiful Soup解析页面)","dateModified":"2020-03-31T00:00:00-05:00","datePublished":"2020-03-31T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/03/31/%E7%88%AC%E8%99%AB02.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/jupyter_notebook_blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://spiritlhl.github.io/jupyter_notebook_blogs/feed.xml" title="SpiritLHL's Python blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','2248958981','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/jupyter_notebook_blogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/jupyter_notebook_blogs/">SpiritLHL&#39;s Python blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/jupyter_notebook_blogs/about/">About Me</a><a class="page-link" href="/jupyter_notebook_blogs/search/">Search</a><a class="page-link" href="/jupyter_notebook_blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">爬虫流程及方法02(Beautiful Soup解析页面)</h1><p class="page-description">爬虫流程及方法02(Beautiful Soup解析页面)</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-03-31T00:00:00-05:00" itemprop="datePublished">
+        Mar 31, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/jupyter_notebook_blogs/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span>
+<span class="c1">#对某论坛的爬取
+</span><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span> <span class="nn">time</span>
+<span class="c1">#需求：爬取网站标题及详情页的文本
+</span>
+<span class="n">a</span> <span class="o">=</span> <span class="bp">True</span>
+<span class="k">while</span> <span class="n">a</span><span class="p">:</span><span class="c1">#可转变成实时循环#对首页的页面数据进行爬取
+</span>    <span class="n">url</span> <span class="o">=</span> <span class="s">"https://www.lolichan.vip/"</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'User-Agent'</span><span class="p">:</span><span class="s">'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36'</span>
+    <span class="p">}</span>
+    <span class="n">page_text</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">).</span><span class="n">text</span><span class="c1">#获取响应数据得加text，不然获取的是响应对象
+</span>    <span class="c1">#在首页中解析出章节标题和详情页URL
+</span>    <span class="c1">#1.实例化BeautifulSoup对象，需要将页面源码加载到该对象中
+</span>    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">page_text</span><span class="p">,</span> <span class="s">'lxml'</span><span class="p">)</span>
+    <span class="c1">#解析章节标题与详情页url
+</span>    <span class="n">div_list</span> <span class="o">=</span> <span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'.node-body &gt; div &gt; h3 &gt; a'</span><span class="p">)</span><span class="c1">#使用select层级选择器
+</span>    <span class="n">fp</span> <span class="o">=</span> <span class="nb">open</span><span class="p">(</span><span class="s">'./xiangqing.text'</span><span class="p">,</span><span class="s">'w'</span><span class="p">,</span><span class="n">encoding</span><span class="o">=</span><span class="s">'utf-8'</span><span class="p">)</span><span class="c1">#创建文档及设定只写w和编码utf-8
+</span>    <span class="k">for</span> <span class="n">div</span> <span class="ow">in</span> <span class="n">div_list</span><span class="p">:</span>
+        <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="n">填入休息时间</span><span class="p">)</span><span class="c1">#防止频繁的请求链接失去响应
+</span>        <span class="n">title</span> <span class="o">=</span> <span class="n">div</span><span class="p">.</span><span class="n">string</span><span class="c1">#获得该标签下的所有文本
+</span>        <span class="n">detail_url</span> <span class="o">=</span> <span class="s">'https://www.lolichan.vip/'</span> <span class="o">+</span> <span class="n">div</span><span class="p">[</span><span class="s">'href'</span><span class="p">]</span><span class="c1">#获得详情页的url
+</span>        <span class="c1">#对详情页发起请求，解析出章节内容
+</span>        <span class="n">detail_page_text</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">detail_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">).</span><span class="n">text</span>
+        <span class="c1">#解析出详情页中相关的章节内容
+</span>        <span class="n">detail_soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">detail_page_text</span><span class="p">,</span><span class="s">'lxml'</span><span class="p">)</span>
+        <span class="n">div_tag</span>  <span class="o">=</span> <span class="n">detail_soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'.structItem-title &gt; a'</span><span class="p">)</span>
+        <span class="c1">#原来的class属性得用class_表示，不然会报错（class是保留字）
+</span>        <span class="n">content</span> <span class="o">=</span> <span class="p">[]</span><span class="c1">#设定空列表
+</span>        <span class="k">for</span> <span class="n">a</span> <span class="ow">in</span> <span class="n">div_tag</span><span class="p">:</span>
+            <span class="n">content</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">a</span><span class="p">.</span><span class="n">text</span><span class="p">)</span><span class="c1">#往空列表内装填
+</span>        <span class="n">fp</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">title</span><span class="o">+</span><span class="s">':'</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">content</span><span class="p">)</span><span class="o">+</span><span class="s">'</span><span class="se">\n</span><span class="s">'</span><span class="p">)</span><span class="c1">#str()使content对象变为字符串形式
+</span>        <span class="k">print</span><span class="p">(</span><span class="n">title</span><span class="p">,</span> <span class="s">'爬取成功'</span><span class="p">)</span><span class="c1">#响应成功
+</span>    <span class="n">a</span> <span class="o">=</span> <span class="bp">False</span>
+</code></pre></div></div>
+
+<p>#号符号是python注释的前置符号</p>
+
+<p>pycharm的热键：
+            ctrl+z 键回撤你的对代码的改动  ctrl+/键注释与代码的转换 
+            ctrl+c复制 ctrl+v粘贴</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="n">soup</span><span class="p">.</span><span class="n">tagName</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">meta</span><span class="p">)</span><span class="c1">#第一组a标签 
+</span></code></pre></div></div>
+<p>soup.tagName返回的是html中第一次出现的tagName标签</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="n">soup</span><span class="p">.</span><span class="n">find</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">'meta'</span><span class="p">))</span><span class="o">=</span><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">meta</span><span class="p">)</span>
+</code></pre></div></div>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>属性定位,定位一定class加空格再=  #属性可以是class 或id 或attr
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">find</span><span class="p">(</span><span class="s">'div'</span><span class="p">,</span> <span class="k">class</span> <span class="err">= '</span><span class="nc">song</span><span class="s">'))
+</span></code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'tagName'</span><span class="p">)</span>
+</code></pre></div></div>
+<p>找到符合标准的所有标签,返回一个列表</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">find_all</span><span class="p">(</span><span class="s">'meta'</span><span class="p">))</span>
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="n">select</span><span class="p">(</span><span class="s">'某种选择器'</span><span class="p">).</span>
+</code></pre></div></div>
+<p>表示class类选择器  id选择器  标签选择器<br />
+返回的是一个列表</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'xx &gt;  xx  xx'</span><span class="p">)</span>
+</code></pre></div></div>
+<p>或</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'xx &gt;  xx &gt; xx'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'.tang'</span><span class="p">))</span><span class="c1">#&lt;div class='tang'&gt;
+</span></code></pre></div></div>
+<p>部分html代码</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code> &lt;div class='tang'&gt;
+        &lt;ul&gt;
+            &lt;li&gt;&lt;a href="http://...." title="qingming"&gt;mutongyao&lt;/a&gt;&lt;/li&gt;
+            &lt;li&gt;&lt;a href="http://...." title="chunjie"&gt;...&lt;/a&gt;&lt;/li&gt;
+        &lt;ul&gt;
+</code></pre></div></div>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'.tang &gt; ul &gt; li &gt; a'</span><span class="p">))</span>
+</code></pre></div></div>
+<p>结果：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;a href="http://...." title="qingming"&gt;...&lt;/a&gt;，
+&lt;a href="http://...." title="chunjie"&gt;...&lt;/a&gt;
+</code></pre></div></div>
+
+<p>层级选择器：此时返回一个列表，此时’.class的内容 &gt; ul &gt; li &gt; a’中大于号&gt;表示一个层级</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span>    <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'.tang &gt; ul &gt; li &gt; a'</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+    <span class="c1">#结果：&lt;a href="http://...." title="qingming"&gt;mutongyao&lt;/a&gt;
+</span>    <span class="c1">#多个层级'.tang &gt; ul a' 这里空格表示多个层级，大于号&gt;表示一个层级
+</span></code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span>    <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'.tang &gt; ul &gt; li &gt; a'</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span><span class="o">=</span><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'.tang &gt; ul a'</span><span class="p">)[</span><span class="mi">0</span><span class="p">])</span>
+</code></pre></div></div>
+
+<p>获取标签之间的文本数据</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span>    <span class="n">soup</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">text</span><span class="o">/</span><span class="n">string</span><span class="o">/</span><span class="n">get_text</span><span class="p">()</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'. class的内容&gt; ul a'</span><span class="p">)[</span><span class="mi">0</span><span class="p">].</span><span class="n">text</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>结果：</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>mutongyao
+</code></pre></div></div>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span>    <span class="n">text</span><span class="o">/</span><span class="n">get_text</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>get_text()可以获取一个标签中‘所有的’文本内容（即使不属于该标签直系文本内容）</p>
+
+<p>string:只可以获得该标签下直系文本内容</p>
+
+<p>获取标签中的属性值</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="k">print</span><span class="p">(</span><span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'.class的内容 &gt; ul a'</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="s">'href'</span><span class="p">])</span>
+</code></pre></div></div>
+
+<h3 id="下行遍历这里两个方法必须是循环中使用"><font color="cyan">下行遍历（这里两个方法必须是循环中使用）</font></h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">soup</span><span class="p">.</span><span class="n">body</span><span class="p">.</span><span class="n">children</span><span class="p">:</span>
+   <span class="k">print</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>遍历儿子节点</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="k">for</span> <span class="n">child</span> <span class="ow">in</span> <span class="n">soup</span><span class="p">.</span><span class="n">body</span><span class="p">.</span><span class="n">descendants</span><span class="p">:</span>
+   <span class="k">print</span><span class="p">(</span><span class="n">child</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>遍历子孙节点</p>
+
+<h3 id="上行遍历"><font color="cyan">上行遍历</font></h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="k">for</span> <span class="n">sibling</span> <span class="ow">in</span> <span class="n">soup</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">next_siblings</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">sibling</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>遍历后续节点</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="c1">#!/usr/bin/env python3
+</span><span class="k">for</span> <span class="n">sibling</span> <span class="ow">in</span> <span class="n">soup</span><span class="p">.</span><span class="n">a</span><span class="p">.</span><span class="n">previous_siblings</span><span class="p">:</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">sibling</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>遍历前续节点</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>soup.prettify()
+</code></pre></div></div>
+
+<p>每个节点一个换行符</p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>&lt;&gt; .find_all(name, attrs, recursive, string, **kwargs）
+</code></pre></div></div>
+<p>返回一个列表类型，存储查找的结果。</p>
+
+<p>name:对标签名称的检索字符串。<br />
+attrs:对标签属性值的检索字符串，可标注属性检索。<br />
+recursive:是否对子孙全部检索，默认True。<br />
+string: &lt;&gt;…&lt;/&gt;中字符串区域的检索字符串。</p>
+
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div><a class="u-url" href="/jupyter_notebook_blogs/markdown/2020/03/31/%E7%88%AC%E8%99%AB02.html" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jupyter_notebook_blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/jupyter_notebook_blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personally explore Python&#39;s study notes.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/spiritLHL" title="spiritLHL"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/Dan.ajax" title="Dan.ajax"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

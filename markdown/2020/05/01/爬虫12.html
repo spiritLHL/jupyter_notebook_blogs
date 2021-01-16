@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>爬虫流程及方法12(高性能异步爬虫) | SpiritLHL’s Python blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="爬虫流程及方法12(高性能异步爬虫)" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="爬虫流程及方法12(高性能异步爬虫)" />
+<meta property="og:description" content="爬虫流程及方法12(高性能异步爬虫)" />
+<link rel="canonical" href="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/01/%E7%88%AC%E8%99%AB12.html" />
+<meta property="og:url" content="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/01/%E7%88%AC%E8%99%AB12.html" />
+<meta property="og:site_name" content="SpiritLHL’s Python blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-05-01T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"爬虫流程及方法12(高性能异步爬虫)","url":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/01/%E7%88%AC%E8%99%AB12.html","@type":"BlogPosting","headline":"爬虫流程及方法12(高性能异步爬虫)","dateModified":"2020-05-01T00:00:00-05:00","datePublished":"2020-05-01T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/05/01/%E7%88%AC%E8%99%AB12.html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/jupyter_notebook_blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://spiritlhl.github.io/jupyter_notebook_blogs/feed.xml" title="SpiritLHL's Python blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','2248958981','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/jupyter_notebook_blogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/jupyter_notebook_blogs/">SpiritLHL&#39;s Python blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/jupyter_notebook_blogs/about/">About Me</a><a class="page-link" href="/jupyter_notebook_blogs/search/">Search</a><a class="page-link" href="/jupyter_notebook_blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">爬虫流程及方法12(高性能异步爬虫)</h1><p class="page-description">爬虫流程及方法12(高性能异步爬虫)</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-05-01T00:00:00-05:00" itemprop="datePublished">
+        May 1, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      1 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/jupyter_notebook_blogs/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <h3 id="前言">前言</h3>
+
+<p>目的:在爬虫中使用异步实现高性能的数据爬取操作。 <br />
+异步爬虫的方式: 
+–多线程，多进程(不建议):
+     好处:可以为相关阻塞的操作单独开启线程或者进程，阻塞操作就可以异步执行。 <br />
+    弊端:无法无限制的开启多线程或者多进程。</p>
+
+<p>ps:get方法与post方法是阻塞的方法</p>
+
+<p>–线程池、进程池(适当的使用)：
+    好处:我们可以降低系统对进程或者线程创建和销毁的一个频率，从而很好的降低系统的开销。
+    弊端:池中线程或进程的数量是有上限。|</p>
+
+<h3 id="模拟多线程操作">模拟多线程操作</h3>
+
+<p>单线程模拟：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="c1">#使用单线程串行方式执行
+</span>
+
+<span class="k">def</span> <span class="nf">get_page</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"正在下载: "</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'下载成功: '</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+<span class="n">name_list</span> <span class="o">=</span> <span class="p">[</span><span class="s">'xiaozi'</span><span class="p">,</span> <span class="s">'aa'</span><span class="p">,</span><span class="s">'bb'</span><span class="p">,</span><span class="s">'cc'</span><span class="p">]</span>
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">name_list</span><span class="p">)):</span>
+    <span class="n">get_page</span><span class="p">(</span><span class="n">name_list</span><span class="p">[</span><span class="n">i</span><span class="p">])</span>
+<span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'%d second'</span> <span class="o">%</span> <span class="p">(</span><span class="n">end_time</span><span class="o">-</span><span class="n">start_time</span><span class="p">))</span>
+</code></pre></div></div>
+
+<p>结果:8s</p>
+
+<p>线程池模拟：</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">time</span>
+<span class="c1">#导入线程池模块对应的类
+</span><span class="kn">from</span> <span class="nn">multiprocessing.dummy</span> <span class="kn">import</span> <span class="n">Pool</span>
+<span class="c1">#使用线程池方式进行
+#导入线程池所对应的pool
+</span>
+
+<span class="n">start_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span><span class="c1">#程序开始时计时
+</span>
+<span class="k">def</span> <span class="nf">get_page</span><span class="p">(</span><span class="nb">str</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">"正在下载: "</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+    <span class="n">time</span><span class="p">.</span><span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'下载成功: '</span><span class="p">,</span> <span class="nb">str</span><span class="p">)</span>
+
+<span class="n">name_list</span> <span class="o">=</span> <span class="p">[</span><span class="s">'xiaozi'</span><span class="p">,</span> <span class="s">'aa'</span><span class="p">,</span><span class="s">'bb'</span><span class="p">,</span><span class="s">'cc'</span><span class="p">]</span><span class="c1">#可迭代对象
+</span>
+<span class="c1">#实例化一个线程对象
+</span><span class="n">pool</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span><span class="c1">#线程池开启4个线程
+</span>
+<span class="c1">#将列表中每一个列表元素传递给get_page进行处理
+</span><span class="n">pool</span><span class="p">.</span><span class="nb">map</span><span class="p">(</span><span class="n">get_page</span><span class="p">,</span> <span class="n">name_list</span><span class="p">)</span><span class="c1">#若有返回值返回的是列表，因为多次传入到map
+</span><span class="n">end_time</span> <span class="o">=</span> <span class="n">time</span><span class="p">.</span><span class="n">time</span><span class="p">()</span><span class="c1">#程序结束时结束计时
+</span><span class="k">print</span><span class="p">(</span><span class="n">end_time</span><span class="o">-</span><span class="n">start_time</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>结果:2s</p>
+
+<h3 id="实际案例">实际案例</h3>
+
+<p>提取js动态加载内容，使用re正则匹配</p>
+
+<p><em>js源码</em></p>
+
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>var contId="1671755",liveStatusUrl="liveStatus.jsp",liveSta="",playSta="1",autoPlay=!1,isLiving=!1,isVrVideo=!1,hdflvUrl="",sdflvUrl="",hdUrl="",sdUrl="",ldUrl="",srcUrl="https://video.pearvideo.com/mp4/third/20200429/cont-1671755-11742488-084919-hd.mp4",vdoUrl=srcUrl,skinRes="//www.pearvideo.com/domain/skin",videoCDN="//video.pearvideo.com"
+</code></pre></div></div>
+
+<p><em>正则匹配</em></p>
+
+<p>ex =  ‘srcUrL=”( .*? )”,vdoUrl’</p>
+
+<p>分组操作提取链接</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">import</span> <span class="nn">requests</span>
+<span class="kn">from</span> <span class="nn">bs4</span> <span class="kn">import</span> <span class="n">BeautifulSoup</span>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">multiprocessing</span> <span class="kn">import</span> <span class="n">Pool</span>
+
+
+
+<span class="k">def</span> <span class="nf">get_video_data</span><span class="p">(</span><span class="n">dic</span><span class="p">):</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'User-Agent'</span><span class="p">:</span> <span class="s">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36"</span>
+    <span class="p">}</span>
+    <span class="c1">#使用线程池对视频数据进行请求（较为耗时的堵塞操作）
+</span>    <span class="n">url</span> <span class="o">=</span> <span class="n">dic</span><span class="p">[</span><span class="s">'url'</span><span class="p">]</span>
+    <span class="k">print</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s">'name'</span><span class="p">],</span> <span class="s">'正在下载'</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">).</span><span class="n">content</span>
+    <span class="c1">#持久化存储操作
+</span>    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s">'name'</span><span class="p">],</span> <span class="s">'wb'</span><span class="p">)</span> <span class="k">as</span> <span class="n">fp</span><span class="p">:</span>
+        <span class="n">fp</span><span class="p">.</span><span class="n">write</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="n">dic</span><span class="p">[</span><span class="s">'name'</span><span class="p">],</span> <span class="s">'下载成功'</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="s">'User-Agent'</span><span class="p">:</span><span class="s">"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/80.0.3987.122 Safari/537.36"</span>
+    <span class="p">}</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="s">'https://www.pearvideo.com/category_5'</span>
+    <span class="n">page_text</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">).</span><span class="n">text</span>
+    <span class="n">soup</span> <span class="o">=</span> <span class="n">BeautifulSoup</span><span class="p">(</span><span class="n">page_text</span><span class="p">,</span> <span class="s">'lxml'</span><span class="p">)</span>
+    <span class="n">li_urls</span> <span class="o">=</span> <span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'.vervideo-bd'</span><span class="p">)</span>
+    <span class="n">urls</span> <span class="o">=</span> <span class="p">[]</span><span class="c1">#存储所有视频的链接和名字
+</span>    <span class="n">i</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">for</span> <span class="n">li</span> <span class="ow">in</span> <span class="n">li_urls</span><span class="p">:</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">i</span> <span class="o">=</span> <span class="n">i</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">detail_url</span> <span class="o">=</span> <span class="s">'https://www.pearvideo.com/'</span> <span class="o">+</span> <span class="n">li</span><span class="p">.</span><span class="n">a</span><span class="p">[</span><span class="s">'href'</span><span class="p">]</span>
+            <span class="n">name</span> <span class="o">=</span> <span class="n">soup</span><span class="p">.</span><span class="n">select</span><span class="p">(</span><span class="s">'.vervideo-title'</span><span class="p">)[</span><span class="n">i</span><span class="p">].</span><span class="n">text</span><span class="o">+</span><span class="s">'.mp4'</span>
+            <span class="n">detail_page_text</span> <span class="o">=</span> <span class="n">requests</span><span class="p">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">detail_url</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mf">0.5</span><span class="p">).</span><span class="n">text</span>
+            <span class="n">ex</span> <span class="o">=</span> <span class="s">'srcUrl="(.*?)",vdoUrl'</span>
+            <span class="n">video_url</span> <span class="o">=</span> <span class="n">re</span><span class="p">.</span><span class="n">findall</span><span class="p">(</span><span class="n">ex</span><span class="p">,</span> <span class="n">detail_page_text</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="n">dic</span> <span class="o">=</span> <span class="p">{</span>
+             <span class="s">'name'</span><span class="p">:</span> <span class="n">name</span><span class="p">,</span>
+             <span class="s">'url'</span><span class="p">:</span> <span class="n">video_url</span>
+             <span class="p">}</span>
+            <span class="n">urls</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">dic</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="k">continue</span>
+
+    <span class="n">pool</span> <span class="o">=</span> <span class="n">Pool</span><span class="p">(</span><span class="mi">4</span><span class="p">)</span>
+    <span class="n">pool</span><span class="p">.</span><span class="nb">map</span><span class="p">(</span><span class="n">get_video_data</span><span class="p">,</span> <span class="n">urls</span><span class="p">)</span>
+    <span class="n">pool</span><span class="p">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">pool</span><span class="p">.</span><span class="n">join</span><span class="p">()</span>
+
+</code></pre></div></div>
+<p>总结：</p>
+
+<p>1.windows环境下需要将主函数放在以下代码下方</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">'__main__'</span><span class="p">:</span>
+</code></pre></div></div>
+
+<p>mac环境下不需要此操作</p>
+
+<p>2.下载时下载二进制数据，使用’wb’而不是’w’。</p>
+
+<p>3.如果下载视频过多(爬取大量数据)，网站要求验证证书，大量爬取需要使用其他方法应对ssl反爬策略。</p>
+
+<p>ps：感谢csdn学院提供的案例支持</p>
+
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div><a class="u-url" href="/jupyter_notebook_blogs/markdown/2020/05/01/%E7%88%AC%E8%99%AB12.html" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jupyter_notebook_blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/jupyter_notebook_blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personally explore Python&#39;s study notes.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/spiritLHL" title="spiritLHL"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/Dan.ajax" title="Dan.ajax"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>

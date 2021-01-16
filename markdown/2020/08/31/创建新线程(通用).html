@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="twitter:card" content="summary_large_image" /><!-- Begin Jekyll SEO tag v2.6.1 -->
+<title>Python新线程使用 | SpiritLHL’s Python blog</title>
+<meta name="generator" content="Jekyll v4.1.1" />
+<meta property="og:title" content="Python新线程使用" />
+<meta property="og:locale" content="en_US" />
+<meta name="description" content="Python新线程使用" />
+<meta property="og:description" content="Python新线程使用" />
+<link rel="canonical" href="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/08/31/%E5%88%9B%E5%BB%BA%E6%96%B0%E7%BA%BF%E7%A8%8B(%E9%80%9A%E7%94%A8).html" />
+<meta property="og:url" content="https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/08/31/%E5%88%9B%E5%BB%BA%E6%96%B0%E7%BA%BF%E7%A8%8B(%E9%80%9A%E7%94%A8).html" />
+<meta property="og:site_name" content="SpiritLHL’s Python blog" />
+<meta property="og:type" content="article" />
+<meta property="article:published_time" content="2020-08-31T00:00:00-05:00" />
+<script type="application/ld+json">
+{"description":"Python新线程使用","url":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/08/31/%E5%88%9B%E5%BB%BA%E6%96%B0%E7%BA%BF%E7%A8%8B(%E9%80%9A%E7%94%A8).html","@type":"BlogPosting","headline":"Python新线程使用","dateModified":"2020-08-31T00:00:00-05:00","datePublished":"2020-08-31T00:00:00-05:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://spiritlhl.github.io/jupyter_notebook_blogs/markdown/2020/08/31/%E5%88%9B%E5%BB%BA%E6%96%B0%E7%BA%BF%E7%A8%8B(%E9%80%9A%E7%94%A8).html"},"@context":"https://schema.org"}</script>
+<!-- End Jekyll SEO tag -->
+<link rel="stylesheet" href="/jupyter_notebook_blogs/assets/css/style.css"><link type="application/atom+xml" rel="alternate" href="https://spiritlhl.github.io/jupyter_notebook_blogs/feed.xml" title="SpiritLHL's Python blog" /><!-- the google_analytics_id gets auto inserted from the config file -->
+
+
+
+<script>(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)})(window,document,'script','//www.google-analytics.com/analytics.js','ga');ga('create','2248958981','auto');ga('require','displayfeatures');ga('send','pageview');</script>
+
+<link rel="shortcut icon" type="image/x-icon" href="/jupyter_notebook_blogs/images/favicon.ico"><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Primer/15.2.0/primer.css" integrity="sha512-xTz2ys4coGAOz8vuV1NcQBkgVmKhsSEtjbqyMJbBHRplFuvKIUo6xhLHpAyPt9mfR6twHJgn9OgVLuqOvjeBhg==" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.14.0/css/all.min.css" integrity="sha512-1PKOgIY59xJ8Co8+NE6FZ+LOAZKjy+KY8iq0G4B3CyeY6wYHN3yt9PW0XpSriVlkMXe40PTKnXrLnZ9+fkDaog==" crossorigin="anonymous" /><script src="https://hypothes.is/embed.js" async></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.css" integrity="sha512-h7nl+xz8wgDlNM4NqKEM4F1NkIRS17M9+uJwIGwuo8vGqIl4BhuCKdxjWEINm+xyrUjNCnK5dCrhM0sj+wTIXw==" crossorigin="anonymous" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/katex.min.js" integrity="sha512-/CMIhXiDA3m2c9kzRyd97MTb3MC6OVnx4TElQ7fkkoRghwDf6gi41gaT1PwF270W6+J60uTmwgeRpNpJdRV6sg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.12.0/contrib/auto-render.min.js" integrity="sha512-Do7uJAaHZm5OLrIv/yN4w0iG1dbu01kzdMNnFfu/mAqgUk6Nniv2JYHcwH+cNwjqgLcqcuBBk+JRvprLVI8azg==" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.5/MathJax.js" integrity="sha512-0doc9hKxR3PYwso42RD1p5ySZpzzuDiOwMrdCEh2WdJZCjcmFKc/wEnL+z8fBQrnHoiNWbo+3fiGkOYXBdQp4A==" crossorigin="anonymous"></script>
+    <script>
+    document.addEventListener("DOMContentLoaded", function() {
+        renderMathInElement( document.body, {
+        delimiters: [
+            {left: "$$", right: "$$", display: true},
+            {left: "[%", right: "%]", display: true},
+            {left: "$", right: "$", display: false}
+        ]}
+        );
+    });
+    </script>
+
+
+<script>
+function wrap_img(fn) {
+    if (document.attachEvent ? document.readyState === "complete" : document.readyState !== "loading") {
+        var elements = document.querySelectorAll(".post img");
+        Array.prototype.forEach.call(elements, function(el, i) {
+            if (el.getAttribute("title") && (el.className != "emoji")) {
+                const caption = document.createElement('figcaption');
+                var node = document.createTextNode(el.getAttribute("title"));
+                caption.appendChild(node);
+                const wrapper = document.createElement('figure');
+                wrapper.className = 'image';
+                el.parentNode.insertBefore(wrapper, el);
+                el.parentNode.removeChild(el);
+                wrapper.appendChild(el);
+                wrapper.appendChild(caption);
+            }
+        });
+    } else { document.addEventListener('DOMContentLoaded', fn); }
+}
+window.onload = wrap_img;
+</script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function(){
+    // add link icon to anchor tags
+    var elem = document.querySelectorAll(".anchor-link")
+    elem.forEach(e => (e.innerHTML = '<i class="fas fa-link fa-xs"></i>'));
+    });
+</script>
+</head>
+<body><header class="site-header">
+
+  <div class="wrapper"><a class="site-title" rel="author" href="/jupyter_notebook_blogs/">SpiritLHL&#39;s Python blog</a><nav class="site-nav">
+        <input type="checkbox" id="nav-trigger" class="nav-trigger" />
+        <label for="nav-trigger">
+          <span class="menu-icon">
+            <svg viewBox="0 0 18 15" width="18px" height="15px">
+              <path d="M18,1.484c0,0.82-0.665,1.484-1.484,1.484H1.484C0.665,2.969,0,2.304,0,1.484l0,0C0,0.665,0.665,0,1.484,0 h15.032C17.335,0,18,0.665,18,1.484L18,1.484z M18,7.516C18,8.335,17.335,9,16.516,9H1.484C0.665,9,0,8.335,0,7.516l0,0 c0-0.82,0.665-1.484,1.484-1.484h15.032C17.335,6.031,18,6.696,18,7.516L18,7.516z M18,13.516C18,14.335,17.335,15,16.516,15H1.484 C0.665,15,0,14.335,0,13.516l0,0c0-0.82,0.665-1.483,1.484-1.483h15.032C17.335,12.031,18,12.695,18,13.516L18,13.516z"/>
+            </svg>
+          </span>
+        </label>
+
+        <div class="trigger"><a class="page-link" href="/jupyter_notebook_blogs/about/">About Me</a><a class="page-link" href="/jupyter_notebook_blogs/search/">Search</a><a class="page-link" href="/jupyter_notebook_blogs/categories/">Tags</a></div>
+      </nav></div>
+</header>
+<main class="page-content" aria-label="Content">
+      <div class="wrapper">
+        <article class="post h-entry" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <header class="post-header">
+    <h1 class="post-title p-name" itemprop="name headline">Python新线程使用</h1><p class="page-description">Python新线程使用</p><p class="post-meta post-meta-title"><time class="dt-published" datetime="2020-08-31T00:00:00-05:00" itemprop="datePublished">
+        Aug 31, 2020
+      </time>
+       • <span class="read-time" title="Estimated read time">
+    
+    
+      2 min read
+    
+</span></p>
+
+    
+      <p class="category-tags"><i class="fas fa-tags category-tags-icon"></i></i> 
+      
+        <a class="category-tags-link" href="/jupyter_notebook_blogs/categories/#markdown">markdown</a>
+        
+      
+      </p>
+    
+
+    </header>
+
+  <div class="post-content e-content" itemprop="articleBody">
+    <ul class="section-nav">
+<li class="toc-entry toc-h3"><a href="#创建并使用多线程">创建并使用多线程</a></li>
+<li class="toc-entry toc-h3"><a href="#共享数据的访问控制">共享数据的访问控制</a></li>
+<li class="toc-entry toc-h3"><a href="#daemon线程">daemon线程</a></li>
+</ul><h3 id="创建并使用多线程">
+<a class="anchor" href="#%E5%88%9B%E5%BB%BA%E5%B9%B6%E4%BD%BF%E7%94%A8%E5%A4%9A%E7%BA%BF%E7%A8%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>创建并使用多线程</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="k">print</span><span class="p">(</span><span class="s">'主线程执行代码'</span><span class="p">)</span> 
+
+<span class="c1"># 从 threading 库中导入Thread类
+</span><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="c1"># 定义一个函数，作为新线程执行的入口函数
+</span><span class="k">def</span> <span class="nf">threadFunc</span><span class="p">(</span><span class="n">arg1</span><span class="p">,</span><span class="n">arg2</span><span class="p">):</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'子线程 开始'</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">f'线程函数参数是：</span><span class="si">{</span><span class="n">arg1</span><span class="si">}</span><span class="s">, </span><span class="si">{</span><span class="n">arg2</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">5</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'子线程 结束'</span><span class="p">)</span>
+
+
+<span class="c1"># 创建 Thread 类的实例对象， 并且指定新线程的入口函数，此时并没有执行
+</span><span class="n">thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">threadFunc</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s">'参数1'</span><span class="p">,</span> <span class="s">'参数2'</span><span class="p">)</span>
+                <span class="p">)</span>
+
+<span class="c1">#target=threadFunc对应执行的函数threadFunc
+#args=('参数1', '参数2')这样新进程添加参数
+# 执行start 方法，就会创建新线程，
+# 并且新线程会去执行入口函数里面的代码。
+# 这时候这个进程有两个线程了。↓
+</span><span class="n">thread</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+
+<span class="c1"># 主线程的代码执行 子线程对象的join方法，
+# 就会等待子线程结束，才继续执行下面的代码
+</span><span class="n">thread</span><span class="p">.</span><span class="n">join</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'主线程结束'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>运行该程序，解释器执行到下面代码时</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">threadFunc</span><span class="p">,</span>
+                <span class="n">args</span><span class="o">=</span><span class="p">(</span><span class="s">'参数1'</span><span class="p">,</span> <span class="s">'参数2'</span><span class="p">)</span>
+                <span class="p">)</span>
+</code></pre></div></div>
+
+<p>创建了一个Thread实例对象，其中，Thread类的初始化参数 有两个</p>
+
+<p>target参数 是指定新线程的 入口函数， 新线程创建后就会 执行该入口函数里面的代码，</p>
+
+<p>args 指定了 传给 入口函数threadFunc 的参数。 线程入口函数 参数，必须放在一个元组里面，里面的元素依次作为入口函数的参数。</p>
+
+<p>注意，上面的代码只是创建了一个Thread实例对象， 但这时，新的线程还没有创建。</p>
+
+<p>要创建线程，必须要调用 Thread 实例对象的 start方法 。也就是执行完下面代码的时候</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">thread</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>新的线程才创建成功，并开始执行 入口函数threadFunc 里面的代码。</p>
+
+<p>有的时候， 一个线程需要等待其它的线程结束，比如需要根据其他线程运行结束后的结果进行处理。</p>
+
+<p>这时可以使用 Thread对象的 join 方法</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="n">thread</span><span class="p">.</span><span class="n">join</span><span class="p">()</span>
+</code></pre></div></div>
+
+<p>如果一个线程A的代码调用了 对应线程B的Thread对象的 join 方法，线程A就会停止继续执行代码，等待线程B结束。 线程B结束后，线程A才继续执行后续的代码。</p>
+
+<pre><code class="language-就是等所一线程执行完毕才继续运行运行下面的程序```">
+所以主线程在执行上面的代码时，就暂停在此处， 一直要等到 新线程执行完毕，退出后，才会继续执行后续的代码。
+
+```python
+#错误示例！！！！
+thread = Thread(target=threadFunc('参数1', '参数2'))
+</code></pre>
+
+<p>↑如果这样写无法创建新线程并执行，这样target传入不是函数，传入的是运行结果<code class="language-plaintext highlighter-rouge">(null)</code>，而且是在主线程运行完了，并不是在子线程里运行。</p>
+
+<h3 id="共享数据的访问控制">
+<a class="anchor" href="#%E5%85%B1%E4%BA%AB%E6%95%B0%E6%8D%AE%E7%9A%84%E8%AE%BF%E9%97%AE%E6%8E%A7%E5%88%B6" aria-hidden="true"><span class="octicon octicon-link"></span></a>共享数据的访问控制</h3>
+
+<p>做多线程开发，经常遇到这样的情况：多个线程里面的代码需要访问<code class="language-plaintext highlighter-rouge">同一个</code>公共的数据对象。</p>
+
+<p>这个公共的数据对象可以是任何类型， 比如一个列表、字典、或者自定义类的对象。</p>
+
+<p>有的时候，程序需要防止线程的代码同时操作公共数据对象。否则，就有可能导致数据的访问互相冲突影响。</p>
+
+<p>请看一个例子。</p>
+
+<p>我们用一个简单的程序模拟一个银行系统，用户可以往自己的帐号上存钱。</p>
+
+<p>对应代码如下：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="n">bank</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'byhy'</span> <span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+
+<span class="c1"># 定义一个函数，作为新线程执行的入口函数
+</span><span class="k">def</span> <span class="nf">deposit</span><span class="p">(</span><span class="n">theadidx</span><span class="p">,</span><span class="n">amount</span><span class="p">):</span>
+    <span class="n">balance</span> <span class="o">=</span>  <span class="n">bank</span><span class="p">[</span><span class="s">'byhy'</span><span class="p">]</span>
+    <span class="c1"># 执行一些任务，耗费了0.1秒
+</span>    <span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">bank</span><span class="p">[</span><span class="s">'byhy'</span><span class="p">]</span>  <span class="o">=</span> <span class="n">balance</span> <span class="o">+</span> <span class="n">amount</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">f'子线程 </span><span class="si">{</span><span class="n">theadidx</span><span class="si">}</span><span class="s"> 结束'</span><span class="p">)</span>
+
+<span class="n">theadlist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span> <span class="o">=</span> <span class="n">deposit</span><span class="p">,</span>
+                    <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="p">)</span>
+    <span class="n">thread</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="c1"># 把线程对象都存储到 threadlist中
+</span>    <span class="n">theadlist</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">thread</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">thread</span> <span class="ow">in</span> <span class="n">theadlist</span><span class="p">:</span>
+    <span class="n">thread</span><span class="p">.</span><span class="n">join</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'主线程结束'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">f'最后我们的账号余额为 </span><span class="si">{</span><span class="n">bank</span><span class="p">[</span><span class="s">"byhy"</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>上面的代码中，一起执行</p>
+
+<p>开始的时候， 该帐号的余额为0，随后我们启动了10个线程， 每个线程都deposit函数，往帐号byhy上存1元钱。</p>
+
+<p>可以预期，执行完程序后，该帐号的余额应该为 10。</p>
+
+<p>然而，我们运行程序后，发现结果如下</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>子线程 0 结束
+子线程 3 结束
+子线程 2 结束
+子线程 4 结束
+子线程 1 结束
+子线程 7 结束
+子线程 5 结束
+子线程 9 结束
+子线程 6 结束
+子线程 8 结束
+主线程结束
+</code></pre></div></div>
+<p>最后我们的账号余额为 1  <br>
+为什么是 1 呢？ 而不是 10 呢？</p>
+
+<p>如果在我们程序代码中，只有一个线程，如下所示</p>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="n">bank</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'byhy'</span> <span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+
+<span class="c1"># 定义一个函数，作为新线程执行的入口函数
+</span><span class="k">def</span> <span class="nf">deposit</span><span class="p">(</span><span class="n">theadidx</span><span class="p">,</span><span class="n">amount</span><span class="p">):</span>
+    <span class="n">balance</span> <span class="o">=</span>  <span class="n">bank</span><span class="p">[</span><span class="s">'byhy'</span><span class="p">]</span>
+    <span class="c1"># 执行一些任务，耗费了0.1秒
+</span>    <span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">bank</span><span class="p">[</span><span class="s">'byhy'</span><span class="p">]</span>  <span class="o">=</span> <span class="n">balance</span> <span class="o">+</span> <span class="n">amount</span>
+
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">deposit</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">f'最后我们的账号余额为 </span><span class="si">{</span><span class="n">bank</span><span class="p">[</span><span class="s">"byhy"</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>代码都是串行执行的。不存在多线程同时访问bank对象的问题，运行结果一切都是正常的。</p>
+
+<p>现在我们程序代码中，有多个线程，并且在这个几个线程中都会去调用<code class="language-plaintext highlighter-rouge">deposit</code>，就有可能同时操作这个bank对象，就有可能出一个线程覆盖另外一个线程的结果的问题。</p>
+
+<p>这时，可以使用threading库里面的锁对象<code class="language-plaintext highlighter-rouge">Lock</code>去保护。</p>
+
+<p>我们修改多线程代码，如下：</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span><span class="p">,</span><span class="n">Lock</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="n">bank</span> <span class="o">=</span> <span class="p">{</span>
+    <span class="s">'byhy'</span> <span class="p">:</span> <span class="mi">0</span>
+<span class="p">}</span>
+
+<span class="n">bankLock</span> <span class="o">=</span> <span class="n">Lock</span><span class="p">()</span>
+
+<span class="c1"># 定义一个函数，作为新线程执行的入口函数
+</span><span class="k">def</span> <span class="nf">deposit</span><span class="p">(</span><span class="n">theadidx</span><span class="p">,</span><span class="n">amount</span><span class="p">):</span>
+    <span class="c1"># 操作共享数据前，申请获取锁
+</span>    <span class="n">bankLock</span><span class="p">.</span><span class="n">acquire</span><span class="p">()</span>
+    
+    <span class="n">balance</span> <span class="o">=</span>  <span class="n">bank</span><span class="p">[</span><span class="s">'byhy'</span><span class="p">]</span>
+    <span class="c1"># 执行一些任务，耗费了0.1秒
+</span>    <span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+    <span class="n">bank</span><span class="p">[</span><span class="s">'byhy'</span><span class="p">]</span>  <span class="o">=</span> <span class="n">balance</span> <span class="o">+</span> <span class="n">amount</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">f'子线程 </span><span class="si">{</span><span class="n">theadidx</span><span class="si">}</span><span class="s"> 结束'</span><span class="p">)</span>
+    
+    <span class="c1"># 操作完共享数据后，申请释放锁
+</span>    <span class="n">bankLock</span><span class="p">.</span><span class="n">release</span><span class="p">()</span>
+
+<span class="n">theadlist</span> <span class="o">=</span> <span class="p">[]</span>
+<span class="k">for</span> <span class="n">idx</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">10</span><span class="p">):</span>
+    <span class="n">thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span> <span class="o">=</span> <span class="n">deposit</span><span class="p">,</span>
+                    <span class="n">args</span> <span class="o">=</span> <span class="p">(</span><span class="n">idx</span><span class="p">,</span><span class="mi">1</span><span class="p">)</span>
+                    <span class="p">)</span>
+    <span class="n">thread</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+    <span class="c1"># 把线程对象都存储到 threadlist中
+</span>    <span class="n">theadlist</span><span class="p">.</span><span class="n">append</span><span class="p">(</span><span class="n">thread</span><span class="p">)</span>
+
+<span class="k">for</span> <span class="n">thread</span> <span class="ow">in</span> <span class="n">theadlist</span><span class="p">:</span>
+    <span class="n">thread</span><span class="p">.</span><span class="n">join</span><span class="p">()</span>
+
+<span class="k">print</span><span class="p">(</span><span class="s">'主线程结束'</span><span class="p">)</span>
+<span class="k">print</span><span class="p">(</span><span class="s">f'最后我们的账号余额为 </span><span class="si">{</span><span class="n">bank</span><span class="p">[</span><span class="s">"byhy"</span><span class="p">]</span><span class="si">}</span><span class="s">'</span><span class="p">)</span>
+</code></pre></div></div>
+<p>执行一下，结果如下</p>
+<div class="language-plaintext highlighter-rouge"><div class="highlight"><pre class="highlight"><code>子线程 0 结束
+子线程 1 结束
+子线程 2 结束
+子线程 3 结束
+子线程 4 结束
+子线程 5 结束
+子线程 6 结束
+子线程 7 结束
+子线程 8 结束
+子线程 9 结束
+主线程结束
+最后我们的账号余额为 10
+</code></pre></div></div>
+<p>正确了。</p>
+
+<pre><code class="language-Lock```对象的acquire方法是申请锁。">
+每个线程在操作共享数据对象之前，都应该申请获取操作权，也就是调用该共享数据对象对应的锁对象的acquire方法。
+
+如果线程A执行如下代码，调用acquire方法的时候，
+```python
+bankLock.acquire()
+</code></pre>
+<p>别的线程B已经申请到了这个锁，并且还没有释放，那么线程A的代码就在此处<code class="language-plaintext highlighter-rouge">等待</code>线程B释放锁，不去执行后面的代码。</p>
+
+<p>直到线程B执行了锁的<code class="language-plaintext highlighter-rouge">release</code>方法释放了这个锁，线程A才可以获取这个锁，就可以执行下面的代码了。</p>
+
+<p>如果这时线程B又执行这个锁的acquire方法，就需要等待线程A执行该锁对象的release方法释放锁，否则也会等待，不去执行后面的代码。</p>
+
+<h3 id="daemon线程">
+<a class="anchor" href="#daemon%E7%BA%BF%E7%A8%8B" aria-hidden="true"><span class="octicon octicon-link"></span></a>daemon线程</h3>
+
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="k">def</span> <span class="nf">threadFunc</span><span class="p">():</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'子线程 结束'</span><span class="p">)</span>
+
+<span class="n">thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">threadFunc</span><span class="p">)</span>
+<span class="n">thread</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'主线程结束'</span><span class="p">)</span>
+</code></pre></div></div>
+
+<p>可以发现，主线程先结束，要过个2秒钟，等子线程运行完，整个程序才会结束退出。</p>
+
+<p>因为：</p>
+
+<p>Python程序中当所有的 <code class="language-plaintext highlighter-rouge">非daemon线程</code> 结束了，整个程序才会结束
+主线程是非daemon线程，启动的子线程缺省也是<code class="language-plaintext highlighter-rouge">非daemon线程</code>线程。</p>
+
+<p>所以，要等到<code class="language-plaintext highlighter-rouge">主线程和子线程</code>都结束，程序才会结束。</p>
+
+<p>我们可以在创建线程的时候，设置daemon参数值为True，如下</p>
+<div class="language-python highlighter-rouge"><div class="highlight"><pre class="highlight"><code><span class="kn">from</span> <span class="nn">threading</span> <span class="kn">import</span> <span class="n">Thread</span>
+<span class="kn">from</span> <span class="nn">time</span> <span class="kn">import</span> <span class="n">sleep</span>
+
+<span class="k">def</span> <span class="nf">threadFunc</span><span class="p">():</span>
+    <span class="n">sleep</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="k">print</span><span class="p">(</span><span class="s">'子线程 结束'</span><span class="p">)</span>
+
+<span class="n">thread</span> <span class="o">=</span> <span class="n">Thread</span><span class="p">(</span><span class="n">target</span><span class="o">=</span><span class="n">threadFunc</span><span class="p">,</span>
+                <span class="n">daemon</span><span class="o">=</span><span class="bp">True</span> <span class="c1"># 设置新线程为daemon线程
+</span>                <span class="p">)</span>
+<span class="n">thread</span><span class="p">.</span><span class="n">start</span><span class="p">()</span>
+<span class="k">print</span><span class="p">(</span><span class="s">'主线程结束'</span><span class="p">)</span>
+</code></pre></div></div>
+<p>再次运行，可以发现，只要主线程结束了，整个程序就结束了。因为只有主线程是非daemon线程。</p>
+
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
+  </div><a class="u-url" href="/jupyter_notebook_blogs/markdown/2020/08/31/%E5%88%9B%E5%BB%BA%E6%96%B0%E7%BA%BF%E7%A8%8B(%E9%80%9A%E7%94%A8).html" hidden></a>
+</article>
+
+
+      </div>
+    </main><footer class="site-footer h-card">
+  <data class="u-url" href="/jupyter_notebook_blogs/"></data>
+
+  <div class="wrapper">
+
+    <div class="footer-col-wrapper">
+      <div class="footer-col">
+        <p class="feed-subscribe">
+          <a href="/jupyter_notebook_blogs/feed.xml">
+            <svg class="svg-icon orange">
+              <use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#rss"></use>
+            </svg><span>Subscribe</span>
+          </a>
+        </p>
+      </div>
+      <div class="footer-col">
+        <p>Personally explore Python&#39;s study notes.</p>
+      </div>
+    </div>
+
+    <div class="social-links"><ul class="social-media-list"><li><a rel="me" href="https://github.com/spiritLHL" title="spiritLHL"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#github"></use></svg></a></li><li><a rel="me" href="https://twitter.com/Dan.ajax" title="Dan.ajax"><svg class="svg-icon grey"><use xlink:href="/jupyter_notebook_blogs/assets/minima-social-icons.svg#twitter"></use></svg></a></li></ul>
+</div>
+
+  </div>
+
+</footer>
+</body>
+
+</html>
