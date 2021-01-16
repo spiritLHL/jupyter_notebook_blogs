@@ -5,7 +5,7 @@ description: A minimal example of using markdown with fastpages.
 categories: [markdown]
 title: An Example Markdown Post
 ---
-# Example Markdown Post
+# markdown文档书写的简单示例
 
 ## Basic setup
 
