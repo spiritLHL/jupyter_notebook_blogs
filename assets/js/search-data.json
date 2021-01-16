@@ -40,7 +40,7 @@
   
       ,"page1": {
           "title": "About Me",
-          "content": "This website is powered by fastpages 1. . a blogging platform that natively supports Jupyter notebooks in addition to other formats. &#8617; . |",
+          "content": "本博客展示本人的Python学习笔记。 [^1]:This website is powered by fastpages . [^2].a blogging platform that natively supports Jupyter notebooks in addition to other formats. .",
           "url": "https://spiritlhl.github.io/jupyter_notebook_blogs/about/",
           "relUrl": "/about/",
           "date": ""
