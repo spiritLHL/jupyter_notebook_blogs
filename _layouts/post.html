@@ -56,6 +56,13 @@ layout: default
 
   <div class="post-content e-content" itemprop="articleBody">
     {{ content | toc  }}
+    <script src="https://utteranc.es/client.js"
+        repo="spiritLHL/blogtalks"
+        issue-term="pathname"
+        theme="github-light"  
+        crossorigin="anonymous"
+        async>
+    </script>
   </div>
   {%- if page.comments -%}
     {%- include utterances.html -%}
@@ -65,10 +72,4 @@ layout: default
   {%- endif -%}
   <a class="u-url" href="{{ page.url | relative_url }}" hidden></a>
 </article>
-<script src="https://utteranc.es/client.js"
-        repo="spiritLHL/blogtalks"
-        issue-term="pathname"
-        theme="github-light"  
-        crossorigin="anonymous"
-        async>
-</script>
+
