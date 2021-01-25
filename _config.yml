@@ -58,7 +58,7 @@ annotations: true
 show_tags: true
 
 # 如果您有要使用的Google Analytics（分析）ID，请在此处添加
-google_analytics: 2248958981
+google_analytics: G-3TD0N5Q1SC
 
 exclude:
   - docker-compose.yml
