@@ -120,3 +120,8 @@ kramdown:
 feed:
   posts_limit: 5 #default posts_limit: 10
   excerpt_only: true
+ 
+ #添加sitemap
+ url: "https://spiritlhl.github.io/jupyter_notebook_blogs/" # the base hostname & protocol for your site
+plugins:
+  - jekyll-sitemap
