@@ -5,6 +5,7 @@ source "https://rubygems.org"
 #
 #     bundle exec jekyll serve
 #Jekyll Sitemap Generator Plugin
+gem install bundle
 gem 'jekyll-sitemap'
 # This will help ensure the proper Jekyll version is running.
 # Happy Jekylling!
