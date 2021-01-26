@@ -4,9 +4,7 @@ source "https://rubygems.org"
 # file and run `bundle install`. Run Jekyll with `bundle exec`, like so:
 #
 #     bundle exec jekyll serve
-#Jekyll Sitemap Generator Plugin
-gem install bundle
-gem 'jekyll-sitemap'
+
 # This will help ensure the proper Jekyll version is running.
 # Happy Jekylling!
 gem "jekyll", "~> 4.1.0"
@@ -43,3 +41,5 @@ gem "wdm", "~> 0.1.1", :install_if => Gem.win_platform?
 
 gem "faraday", "< 1.0"
 
+#Jekyll Sitemap Generator Plugin
+gem 'jekyll-sitemap'
