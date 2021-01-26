@@ -1,1 +1,1 @@
-Sitemap: https://spiritlhl.github.io/jupyter_notebook_blogs/sitemap.xml
+Sitemap: https://spiritlhl.github.io/jupyter_notebook_blogs//jupyter_notebook_blogs/sitemap.xml
