@@ -8,13 +8,13 @@
 
 title: SpiritLHL's Python blog
 description: Personally explore Python's study notes.
-github_username: spiritLHL
+github_username: jumbojing
 # you can comment the below line out if your repo name is not different than your baseurl
 github_repo: "jupyter_notebook_blogs"
 
 # OPTIONAL: override baseurl and url if using a custom domain
 # Note: leave out the trailing / from this value. 
-url: "https://spiritLHL.github.io" # the base hostname & protocol for your site, e.g. http://example.com
+url: "https://jumbojing.github.io" # the base hostname & protocol for your site, e.g. http://example.com
 
 ###########################################################
 #########  Special Instructions for baseurl ###############
@@ -39,8 +39,8 @@ baseurl: "/jupyter_notebook_blogs" # the subpath of your site, e.g. "/blog".
 # Github和Twitter是可选的：
 minima:
   social_links:
-    twitter: Dan.ajax
-    github: spiritLHL
+    twitter:
+    github: jumbojing
 
 # 将此设置为true可获得LaTeX数学方程式支持
 use_math: true
@@ -87,7 +87,7 @@ plugins:
   - jekyll-gist
   - jekyll-octicons
   - jekyll-toc
-  - jekyll-twitter-plugin
+#  - jekyll-twitter-plugin
   - jekyll-relative-links
   - jekyll-seo-tag
   - jekyll-remote-theme
