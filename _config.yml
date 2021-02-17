@@ -39,7 +39,7 @@ baseurl: "/jupyter_notebook_blogs" # the subpath of your site, e.g. "/blog".
 # Github和Twitter是可选的：
 minima:
   social_links:
-    twitter: Dan.ajax
+    twitter: 
     github: spiritLHL
 
 # 将此设置为true可获得LaTeX数学方程式支持
